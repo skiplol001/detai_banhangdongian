@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Player {
-
     private int money;
     private int mentalPoints;
     private Map<String, Integer> inventory;
