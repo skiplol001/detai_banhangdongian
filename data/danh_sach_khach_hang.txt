@@ -1,0 +1,5 @@
+Liễu Như Yên,25,Nữ,KH001,false
+Tạ Minh Kha,25,Nam,MOD002,false
+Tiểu Lạc,18,Nữ,KH003,false
+Shyn Mụi Mụi,18,Nữ,MOD004,false
+Tăng Quốc Cường,28,Nam,MOD005,false

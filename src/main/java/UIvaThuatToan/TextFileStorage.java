@@ -5,7 +5,7 @@ import java.nio.file.*;
 import java.util.*;
 
 public class TextFileStorage {
-    private static final String DATA_DIR = "database";
+    static final String DATA_DIR = "database";
     private static final String PLAYER_FILE = DATA_DIR + File.separator + "player_data.txt";
     private static final String INVENTORY_FILE = DATA_DIR + File.separator + "inventory.txt";
 

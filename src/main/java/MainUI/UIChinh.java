@@ -4,22 +4,23 @@
  */
 package MainUI;
 
+import UIvaThuatToan.KhachHang;
+import UIvaThuatToan.QuanLyKhachHangService;
+import UIvaThuatToan.TaiAnhGamePlay;
 import UIvaThuatToan.TextFileStorage;
+import UiPhu.UiKhachHang;
 import UiPhu.UiPhuBanHang;
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.HashMap;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
-import javax.swing.border.Border;
-import javax.swing.border.CompoundBorder;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.LineBorder;
 
 /**
  *
@@ -31,13 +32,18 @@ public class UIChinh extends javax.swing.JFrame {
     private Timer gameTimer;
     private long gameStartTime;
     private final float TIME_SCALE = 0.1f;
+    private QuanLyKhachHangService khachHangService;
+    private KhachHang khachHangTamThoi;
+    private KhachHang khachHangMoiTamThoi;
 
     public UIChinh() {
         initComponents();
         customizeUI();
-        loadPlayerData();
+        loadPlayerData(); // Phải gọi trước
+        khachHangService = new QuanLyKhachHangService(playerData); // Gọi sau khi có playerData
         updateUI();
         initGameTimer();
+        loadRandomImageToButton();
     }
 
     /**
@@ -59,11 +65,14 @@ public class UIChinh extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
+        btnAnh = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         btnKHTrongNgay = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        btnTTKH = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
+        btnBan = new javax.swing.JButton();
+        btnKhong = new javax.swing.JButton();
         menuBar = new javax.swing.JMenuBar();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -127,15 +136,28 @@ public class UIChinh extends javax.swing.JFrame {
 
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
+        btnAnh.setText("jButton2");
+        btnAnh.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAnhActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(136, 136, 136)
+                .addComponent(btnAnh, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 213, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(btnAnh, javax.swing.GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         jPanel4.setBackground(new java.awt.Color(204, 255, 255));
@@ -144,10 +166,20 @@ public class UIChinh extends javax.swing.JFrame {
         btnKHTrongNgay.setToolTipText("");
         btnKHTrongNgay.setActionCommand("btnKHTrongNgay");
         btnKHTrongNgay.setName("btnKHTrongNgay"); // NOI18N
+        btnKHTrongNgay.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnKHTrongNgayActionPerformed(evt);
+            }
+        });
 
-        jButton3.setText("Thông tin KH");
-        jButton3.setToolTipText("");
-        jButton3.setActionCommand("btnThongTinKH");
+        btnTTKH.setText("Thông tin KH");
+        btnTTKH.setToolTipText("");
+        btnTTKH.setActionCommand("btnThongTinKH");
+        btnTTKH.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTTKHActionPerformed(evt);
+            }
+        });
 
         jLabel7.setText("Điểm Tinh Thần Hiện Tại");
         jLabel7.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -155,39 +187,60 @@ public class UIChinh extends javax.swing.JFrame {
         jLabel8.setText("100");
         jLabel8.setBorder(javax.swing.BorderFactory.createEtchedBorder(new java.awt.Color(255, 102, 0), null));
 
+        btnBan.setText("bán");
+        btnBan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBanActionPerformed(evt);
+            }
+        });
+
+        btnKhong.setText("không");
+        btnKhong.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnKhongActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jButton3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 47, Short.MAX_VALUE)
+                .addComponent(btnTTKH)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                        .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(31, 31, 31))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGap(40, 40, 40)
+                        .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGap(28, 28, 28)
+                        .addComponent(btnBan, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
                         .addComponent(jLabel8)
-                        .addGap(91, 91, 91)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnKhong)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnKHTrongNgay)
                 .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGap(25, 25, 25)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnKHTrongNgay, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnTTKH, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(10, Short.MAX_VALUE))
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel7)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(25, 25, 25)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnKHTrongNgay, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(27, 27, 27)
-                        .addComponent(jLabel7)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel8)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel8)
+                        .addComponent(btnKhong))
+                    .addComponent(btnBan))
+                .addGap(9, 9, 9))
         );
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -204,7 +257,7 @@ public class UIChinh extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(162, 162, 162)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(166, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -299,14 +352,93 @@ public class UIChinh extends javax.swing.JFrame {
 
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void btnKHTrongNgayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnKHTrongNgayActionPerformed
+        try {
+            SwingUtilities.invokeLater(() -> {
+                UiKhachHang giaoDienKH = new UiKhachHang();
+                giaoDienKH.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                giaoDienKH.setVisible(true);
+            });
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Lỗi khi mở giao diện khách hàng: " + e.getMessage(),
+                    "Lỗi", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnKHTrongNgayActionPerformed
+
+    private void btnAnhActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnhActionPerformed
+        // Chỉ tạo khách hàng mới nếu không có khách hàng tạm thời nào đang chờ
+        if (khachHangMoiTamThoi == null) {
+            // Tạo khách hàng mới và gán vào biến tạm thời
+            khachHangMoiTamThoi = khachHangService.taoKhachHangMoi();
+
+            if (khachHangMoiTamThoi != null) {
+                String yeuCau = khachHangMoiTamThoi.getTen() + " nói: " + khachHangService.layYeuCauKhachHangHienTai();
+
+                // Hiển thị yêu cầu khách hàng qua JOptionPane
+                JOptionPane.showMessageDialog(
+                        this,
+                        yeuCau,
+                        "Khách hàng mới",
+                        JOptionPane.INFORMATION_MESSAGE
+                );
+            }
+        } else {
+            // Thông báo cho người dùng rằng có khách hàng đang chờ
+            JOptionPane.showMessageDialog(this, "Có một khách hàng đang chờ rồi!", "Lỗi", JOptionPane.WARNING_MESSAGE);
+        }
+    }//GEN-LAST:event_btnAnhActionPerformed
+
+    private void btnTTKHActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTTKHActionPerformed
+        if (khachHangMoiTamThoi != null) {
+            // Gọi phương thức layThongTin() từ đối tượng KhachHang tạm thời
+            String thongTin = khachHangMoiTamThoi.layThongTin();
+            JOptionPane.showMessageDialog(this, thongTin, "Thông Tin Khách", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(this, "Chưa có khách hàng nào!", "Lỗi", JOptionPane.WARNING_MESSAGE);
+        }
+    }//GEN-LAST:event_btnTTKHActionPerformed
+
+    private void btnBanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBanActionPerformed
+        if (khachHangMoiTamThoi != null) { // Kiểm tra có khách hàng tạm thời không
+            khachHangService.setKhachHangHienTai(khachHangMoiTamThoi); // Gán KH tạm thời cho service
+            boolean result = khachHangService.xuLyBanHang(true);
+            if (result) {
+                updateUI();
+                loadRandomImageToButton();
+                khachHangService.setKhachHangHienTai(null); // Reset KH hiện tại
+                khachHangMoiTamThoi = null; // Reset biến tạm thời
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Chưa có khách hàng nào!", "Lỗi", JOptionPane.WARNING_MESSAGE);
+        }
+    }//GEN-LAST:event_btnBanActionPerformed
+
+    private void btnKhongActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnKhongActionPerformed
+        if (khachHangMoiTamThoi != null) { // Kiểm tra có khách hàng tạm thời không
+            khachHangService.setKhachHangHienTai(khachHangMoiTamThoi); // Gán KH tạm thời cho service
+            boolean result = khachHangService.xuLyBanHang(false);
+            if (result) {
+                updateUI();
+                loadRandomImageToButton();
+                khachHangService.setKhachHangHienTai(null); // Reset KH hiện tại
+                khachHangMoiTamThoi = null; // Reset biến tạm thời
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Chưa có khách hàng nào!", "Lỗi", JOptionPane.WARNING_MESSAGE);
+        }
+    }//GEN-LAST:event_btnKhongActionPerformed
+
     /**
      * @param args the command line arguments
      */
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAnh;
+    private javax.swing.JButton btnBan;
     private javax.swing.JButton btnKHTrongNgay;
+    private javax.swing.JButton btnKhong;
+    private javax.swing.JButton btnTTKH;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -326,7 +458,7 @@ public class UIChinh extends javax.swing.JFrame {
         JPanel[] panels = {jPanel1, jPanel2, jPanel3, jPanel4};
         JLabel[] labels = {jLabel1, jLabel2, jLabel3, jLabel4, jLabel5, jLabel6, jLabel7, jLabel8};
         JButton[] specialButtons = {btnKHTrongNgay, jButton1}; // Các nút màu đỏ máu
-        JButton[] normalButtons = {jButton3}; // Các nút màu xanh rêu
+        JButton[] normalButtons = {btnTTKH}; // Các nút màu xanh rêu
 
         MaQuaiTheme.applyTheme(this, panels, labels, specialButtons, normalButtons);
 
@@ -335,5 +467,16 @@ public class UIChinh extends javax.swing.JFrame {
         jLabel6.setFont(new Font("Dialog", Font.BOLD, 14));
         jLabel8.setFont(new Font("Dialog", Font.BOLD, 14));
         jLabel8.setForeground(new Color(140, 200, 140));
+    }
+
+    private void loadRandomImageToButton() {
+        try {
+            ImageIcon randomIcon = TaiAnhGamePlay.loadRandomImage(
+                    btnAnh.getWidth(),
+                    btnAnh.getHeight());
+            btnAnh.setIcon(randomIcon);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+        }
     }
 }
