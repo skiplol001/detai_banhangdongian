@@ -1,4 +1,4 @@
-package UIvaThuatToan;
+package model;
 
 public class KhachHang {
 

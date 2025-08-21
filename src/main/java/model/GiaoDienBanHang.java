@@ -1,6 +1,6 @@
-package UiPhu;
+package model;
 
-import UIvaThuatToan.KhachHang;
+import model.KhachHang;
 import javax.swing.*;
 import java.awt.*;
 public class GiaoDienBanHang extends JDialog {

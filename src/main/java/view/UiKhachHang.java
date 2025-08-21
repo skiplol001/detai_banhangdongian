@@ -2,10 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/Application.java to edit this template
  */
-package UiPhu;
+package view;
 
-import UIvaThuatToan.KhachHang;
-import UIvaThuatToan.QuanLyKhachHang;
+import model.KhachHang;
+import model.QuanLyKhachHang;
 import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;

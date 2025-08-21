@@ -1,4 +1,4 @@
-package UIvaThuatToan;
+package model;
 
 import java.util.List;
 import java.util.Random;
@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.Collections;
 import java.util.Arrays;
+import util.TextFileStorage;
 
 public class QuanLyKhachHangService {
 

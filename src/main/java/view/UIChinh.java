@@ -2,14 +2,15 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/Application.java to edit this template
  */
-package MainUI;
+package view;
 
-import UIvaThuatToan.KhachHang;
-import UIvaThuatToan.QuanLyKhachHangService;
-import UIvaThuatToan.TaiAnhGamePlay;
-import UIvaThuatToan.TextFileStorage;
-import UiPhu.UiKhachHang;
-import UiPhu.UiPhuBanHang;
+import view.MaQuaiTheme;
+import model.KhachHang;
+import model.QuanLyKhachHangService;
+import util.TaiAnhGamePlay;
+import util.TextFileStorage;
+import view.UiKhachHang;
+import view.UiPhuBanHang;
 import java.awt.Color;
 import java.awt.Font;
 import java.util.HashMap;

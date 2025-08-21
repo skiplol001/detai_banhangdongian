@@ -1,4 +1,4 @@
-package MainUI;
+package view;
 
 
 import javax.swing.*;
