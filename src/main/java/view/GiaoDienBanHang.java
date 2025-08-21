@@ -1,8 +1,9 @@
-package model;
+package view;
 
 import model.KhachHang;
 import javax.swing.*;
 import java.awt.*;
+import model.KhachHang;
 public class GiaoDienBanHang extends JDialog {
 
     private boolean daBanHang = false;
