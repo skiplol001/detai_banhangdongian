@@ -14,139 +14,166 @@ public class QuanLyKhachHangService {
     private final QuanLyKhachHang quanLyKH;
     private final TextFileStorage.PlayerData playerData;
     private final Random random;
-    private final Map<String, String> khachHangYeuCauMap; // Thêm Map mới
 
     private final String[] danhSachVatPham = {
-      "Snack", "Thuốc", "Nước suối", "Bánh mì"
+        "Snack", "Thuốc", "Nước suối", "Bánh mì"
     };
 
     public QuanLyKhachHangService(TextFileStorage.PlayerData playerData) {
         this.quanLyKH = new QuanLyKhachHang();
         this.playerData = playerData;
         this.random = new Random();
-        this.khachHangYeuCauMap = new HashMap<>(); // Khởi tạo Map
     }
 
-    /**
-     * Tạo một khách hàng mới ngẫu nhiên và lưu yêu cầu của họ.
-     *
-     * @return Đối tượng KhachHang mới được tạo.
-     */
+    private HashMap<String, Integer> generateRandomYeuCauMap() {
+        HashMap<String, Integer> requiredItems = new HashMap<>();
+        List<String> vatPhamList = Arrays.asList(danhSachVatPham);
+        Collections.shuffle(vatPhamList);
+        int soLuongVatPham = random.nextInt(4) + 1;
+        for (int i = 0; i < soLuongVatPham; i++) {
+            requiredItems.put(vatPhamList.get(i), 1);
+        }
+        return requiredItems;
+    }
+
     public KhachHang taoKhachHangMoi() {
-        List<KhachHang> danhSach = QuanLyKhachHang.taiDanhSachKhachHang();
-        if (!danhSach.isEmpty()) {
+        List<KhachHang> danhSach = QuanLyKhachHang.layDanhSachKhachHangHomNay();
+        if (danhSach != null && !danhSach.isEmpty()) {
             KhachHang khachMoi = danhSach.get(random.nextInt(danhSach.size()));
-            
-            // Bước quan trọng: Gán khách hàng mới cho thuộc tính hiện tại của service.
-            this.khachHangHienTai = khachMoi; 
-            
-            // Lưu yêu cầu ngẫu nhiên vào Map, sử dụng mã KH để liên kết.
-            khachHangYeuCauMap.put(khachMoi.getMaKH(), generateRandomYeuCau());
-            
+            khachMoi.setVatPhamYeuCau(generateRandomYeuCauMap());
+            this.khachHangHienTai = khachMoi;
             return khachMoi;
         }
         return null;
     }
 
-    /**
-     * Tạo một chuỗi yêu cầu ngẫu nhiên với các vật phẩm không trùng lặp.
-     *
-     * @return Chuỗi yêu cầu.
-     */
-    private String generateRandomYeuCau() {
-        StringBuilder yeuCau = new StringBuilder("Tôi muốn mua: ");
-        
-        // Sử dụng Collections.shuffle để chọn ngẫu nhiên các vật phẩm không trùng lặp
-        List<String> vatPhamList = Arrays.asList(danhSachVatPham);
-        Collections.shuffle(vatPhamList);
-        
-        // Chọn ngẫu nhiên từ 1 đến 4 vật phẩm
-        int soLuongVatPham = random.nextInt(4) + 1;
-
-        for (int i = 0; i < soLuongVatPham; i++) {
-            yeuCau.append(vatPhamList.get(i));
-            if (i < soLuongVatPham - 1) {
-                yeuCau.append(", ");
-            }
-        }
-        return yeuCau.toString();
-    }
-
-    /**
-     * Lấy yêu cầu của khách hàng hiện tại.
-     *
-     * @return Chuỗi yêu cầu hoặc null nếu không có khách hàng.
-     */
     public String layYeuCauKhachHangHienTai() {
         if (khachHangHienTai == null) {
-            return null;
+            return "Chưa có yêu cầu";
         }
-        return khachHangYeuCauMap.get(khachHangHienTai.getMaKH());
+        StringBuilder yeuCau = new StringBuilder("Tôi muốn mua: ");
+        HashMap<String, Integer> vatPham = khachHangHienTai.getVatPhamYeuCau();
+        int count = 0;
+        for (Map.Entry<String, Integer> entry : vatPham.entrySet()) {
+            yeuCau.append(entry.getKey());
+            if (count < vatPham.size() - 1) {
+                yeuCau.append(", ");
+            }
+            count++;
+        }
+        return yeuCau.toString();
     }
 
     public void setKhachHangHienTai(KhachHang khachHang) {
         this.khachHangHienTai = khachHang;
     }
 
-    /**
-     * Lấy thông tin chi tiết của khách hàng hiện tại.
-     *
-     * @return Chuỗi HTML chứa thông tin khách hàng.
-     */
-    public String layThongTinKhachHang() {
-        if (khachHangHienTai == null) {
-            return null;
-        }
-
-        String yeuCauHienTai = layYeuCauKhachHangHienTai();
-        
-        return String.format("<html><b>THÔNG TIN KIỂM TRA</b><br><br>"
-                + "<b>Tên:</b> %s<br>"
-                + "<b>Tuổi:</b> %d<br>"
-                + "<b>Mã KH:</b> %s<br>"
-                + "<b>Loại:</b> %s<br>"
-                + "<b>Yêu cầu:</b> %s",
-                khachHangHienTai.getTen(),
-                khachHangHienTai.getTuoi(),
-                khachHangHienTai.getMaKH(),
-                khachHangHienTai.isLaVong() ? "Vong" : "Người thường",
-                yeuCauHienTai != null ? yeuCauHienTai : "Chưa có yêu cầu");
-    }
-
     public KhachHang getKhachHangHienTai() {
         return this.khachHangHienTai;
     }
 
-    public boolean xuLyBanHang(boolean quyetDinhBan) {
+    // QUAN TRỌNG: Đổi tất cả HashMap thành Map
+    public boolean xuLyBanHang(boolean quyetDinhBan, Map<String, Integer> inventory) {
         if (khachHangHienTai == null) {
             return false;
         }
 
         if (quyetDinhBan) {
-            handleSuccessfulSale();
+            if (!handleSuccessfulSale(inventory)) {
+                return false;
+            }
         } else {
             handleRejectedSale();
         }
-        
-        // Sau khi giao dịch hoàn tất, reset trạng thái
-        khachHangYeuCauMap.remove(khachHangHienTai.getMaKH());
-        this.khachHangHienTai = null;
 
+        this.khachHangHienTai = null;
+        TextFileStorage.savePlayerData(playerData);
         return true;
     }
 
-    private void handleSuccessfulSale() {
+    private boolean handleSuccessfulSale(Map<String, Integer> inventory) {
+        HashMap<String, Integer> requiredItems = khachHangHienTai.getVatPhamYeuCau();
+
+        for (Map.Entry<String, Integer> entry : requiredItems.entrySet()) {
+            String itemName = entry.getKey();
+            int requiredQuantity = entry.getValue();
+            int currentQuantity = inventory.getOrDefault(itemName, 0);
+
+            if (currentQuantity < requiredQuantity) {
+                return false;
+            }
+        }
+
+        for (Map.Entry<String, Integer> entry : requiredItems.entrySet()) {
+            String itemName = entry.getKey();
+            int requiredQuantity = entry.getValue();
+            int currentQuantity = inventory.get(itemName);
+
+            if (currentQuantity == requiredQuantity) {
+                inventory.remove(itemName);
+            } else {
+                inventory.put(itemName, currentQuantity - requiredQuantity);
+            }
+        }
+
         if (khachHangHienTai.isLaVong()) {
             playerData.mentalPoints = Math.max(0, playerData.mentalPoints - 10);
         } else {
             playerData.money += 50;
             playerData.mentalPoints = Math.min(100, playerData.mentalPoints + 5);
         }
+
+        return true;
     }
 
     private void handleRejectedSale() {
         if (!khachHangHienTai.isLaVong()) {
             playerData.mentalPoints = Math.max(0, playerData.mentalPoints - 5);
         }
+    }
+
+    public String kiemTraDuVatPham(Map<String, Integer> inventory) {
+        if (khachHangHienTai == null) {
+            return "Chưa có khách hàng";
+        }
+
+        StringBuilder missingItems = new StringBuilder();
+        HashMap<String, Integer> requiredItems = khachHangHienTai.getVatPhamYeuCau();
+
+        for (Map.Entry<String, Integer> entry : requiredItems.entrySet()) {
+            String itemName = entry.getKey();
+            int requiredQuantity = entry.getValue();
+            int currentQuantity = inventory.getOrDefault(itemName, 0);
+
+            if (currentQuantity < requiredQuantity) {
+                int missing = requiredQuantity - currentQuantity;
+                missingItems.append("Thiếu ").append(missing).append(" ").append(itemName).append("\n");
+            }
+        }
+
+        if (missingItems.length() == 0) {
+            return "Bạn có đủ vật phẩm! Có thể bán.";
+        } else {
+            return "Vật phẩm thiếu:\n" + missingItems.toString();
+        }
+    }
+
+    public boolean kiemTraCoTheBan(Map<String, Integer> inventory) {
+        if (khachHangHienTai == null) {
+            return false;
+        }
+
+        HashMap<String, Integer> requiredItems = khachHangHienTai.getVatPhamYeuCau();
+
+        for (Map.Entry<String, Integer> entry : requiredItems.entrySet()) {
+            String itemName = entry.getKey();
+            int requiredQuantity = entry.getValue();
+            int currentQuantity = inventory.getOrDefault(itemName, 0);
+
+            if (currentQuantity < requiredQuantity) {
+                return false;
+            }
+        }
+        return true;
     }
 }

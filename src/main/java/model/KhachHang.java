@@ -1,19 +1,23 @@
 package model;
 
+import java.util.HashMap;
+
 public class KhachHang {
 
     private String ten;
     private int tuoi;
     private String gioiTinh;
     private String maKH;
-    private boolean laVong; // true nếu là vong, false nếu là người thường
+    private boolean laVong;
+    private HashMap<String, Integer> vatPhamYeuCau; // Thêm field này
 
     public KhachHang(String ten, int tuoi, String gioiTinh, String maKH, boolean laVong) {
         this.ten = ten;
         this.tuoi = tuoi;
         this.gioiTinh = gioiTinh;
         this.maKH = maKH;
-        this.laVong = laVong; // Đã sửa từ isVong thành laVong
+        this.laVong = laVong;
+        this.vatPhamYeuCau = new HashMap<>(); // Khởi tạo
     }
 
     // Getter methods
@@ -37,6 +41,19 @@ public class KhachHang {
         return laVong;
     }
 
+    // Thêm các phương thức mới cho vatPhamYeuCau
+    public HashMap<String, Integer> getVatPhamYeuCau() {
+        return vatPhamYeuCau;
+    }
+
+    public void setVatPhamYeuCau(HashMap<String, Integer> vatPhamYeuCau) {
+        this.vatPhamYeuCau = vatPhamYeuCau;
+    }
+
+    public void themVatPhamYeuCau(String tenVatPham, int soLuong) {
+        this.vatPhamYeuCau.put(tenVatPham, soLuong);
+    }
+
     @Override
     public String toString() {
         return "Tên: " + ten + ", Tuổi: " + tuoi + ", Giới tính: " + gioiTinh
@@ -47,8 +64,6 @@ public class KhachHang {
         return "Tên: " + ten
                 + "\nTuổi: " + tuoi
                 + "\nGiới tính: " + gioiTinh
-                + "\nMã khách hàng: " + maKH
-                + "\nLoại: " + (laVong ? "Vong" : "Người thường");
-
+                + "\nMã khách hàng: " + maKH;
     }
 }

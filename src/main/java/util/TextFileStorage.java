@@ -6,6 +6,7 @@ import java.nio.file.*;
 import java.util.*;
 
 public class TextFileStorage {
+
     static final String DATA_DIR = "database";
     private static final String PLAYER_FILE = DATA_DIR + File.separator + "player_data.txt";
     private static final String INVENTORY_FILE = DATA_DIR + File.separator + "inventory.txt";
@@ -26,6 +27,7 @@ public class TextFileStorage {
     }
 
     public static class PlayerData {
+
         public int money;
         public int mentalPoints;
         public Map<String, Integer> inventory;
@@ -67,19 +69,39 @@ public class TextFileStorage {
         return new PlayerData(money, mentalPoints, inventory);
     }
 
+    // THÊM PHƯƠNG THỨC MỚI ĐỂ LƯU PlayerData
+    public static void savePlayerData(PlayerData playerData) {
+        try {
+            Files.write(Paths.get(PLAYER_FILE),
+                    (playerData.money + "\n" + playerData.mentalPoints).getBytes(),
+                    StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+
+            StringBuilder inventoryContent = new StringBuilder();
+            for (Map.Entry<String, Integer> entry : playerData.inventory.entrySet()) {
+                inventoryContent.append(entry.getKey()).append(",").append(entry.getValue()).append("\n");
+            }
+            Files.write(Paths.get(INVENTORY_FILE),
+                    inventoryContent.toString().getBytes(),
+                    StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+        } catch (IOException e) {
+            System.err.println("Lỗi lưu dữ liệu: " + e.getMessage());
+        }
+    }
+
+    // GIỮ NGUYÊN PHƯƠNG THỨC CŨ (nếu cần cho các phần khác)
     public static void savePlayerData(Player player) {
         try {
-            Files.write(Paths.get(PLAYER_FILE), 
-                       (player.getMoney() + "\n" + player.getMentalPoints()).getBytes(),
-                       StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+            Files.write(Paths.get(PLAYER_FILE),
+                    (player.getMoney() + "\n" + player.getMentalPoints()).getBytes(),
+                    StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
 
             StringBuilder inventoryContent = new StringBuilder();
             for (Map.Entry<String, Integer> entry : player.getInventory().entrySet()) {
                 inventoryContent.append(entry.getKey()).append(",").append(entry.getValue()).append("\n");
             }
-            Files.write(Paths.get(INVENTORY_FILE), 
-                       inventoryContent.toString().getBytes(),
-                       StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+            Files.write(Paths.get(INVENTORY_FILE),
+                    inventoryContent.toString().getBytes(),
+                    StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
         } catch (IOException e) {
             System.err.println("Lỗi lưu dữ liệu: " + e.getMessage());
         }

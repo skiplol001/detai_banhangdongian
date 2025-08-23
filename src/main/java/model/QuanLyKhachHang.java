@@ -22,32 +22,26 @@ public class QuanLyKhachHang {
         for (KhachHang baseCustomer : DANH_SACH_KHACH_HANG_GOC) {
             boolean laVong = random.nextDouble() < 0.3; // 30% là vong
 
-            if (random.nextDouble() < 0.7) {
-                // 70% giữ nguyên thông tin (có thể là vong hoặc không)
+            if (laVong) {
+                // Nếu là vong: tuổi từ 100 trở lên và mã KH được random
+                int tuoiVong = 100 + random.nextInt(100); // Tuổi từ 100-199
+                String maVong = "V" + (1000 + random.nextInt(9000)); // Mã dạng V1000-V9999
+                
+                danhSachKhachHangHomNay.add(new KhachHang(
+                        baseCustomer.getTen(),
+                        tuoiVong,
+                        baseCustomer.getGioiTinh(),
+                        maVong,
+                        true
+                ));
+            } else {
+                // Nếu không phải vong: giữ nguyên thông tin gốc
                 danhSachKhachHangHomNay.add(new KhachHang(
                         baseCustomer.getTen(),
                         baseCustomer.getTuoi(),
                         baseCustomer.getGioiTinh(),
                         baseCustomer.getMaKH(),
-                        laVong
-                ));
-            } else {
-                // 30% thay đổi thông tin
-                int tuoiMoi = baseCustomer.getTuoi() + random.nextInt(10) - 5;
-                String maMoi = "MOD" + baseCustomer.getMaKH().substring(2);
-
-                // Nếu là vong thì thêm dấu hiệu nhận biết
-                if (laVong) {
-                    maMoi = "V" + maMoi;
-                    tuoiMoi += random.nextInt(20) + 10; // Vong thường có tuổi cao hơn
-                }
-
-                danhSachKhachHangHomNay.add(new KhachHang(
-                        baseCustomer.getTen(),
-                        tuoiMoi,
-                        baseCustomer.getGioiTinh(),
-                        maMoi,
-                        laVong
+                        false
                 ));
             }
         }

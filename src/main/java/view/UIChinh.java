@@ -12,6 +12,7 @@ import util.TextFileStorage;
 import view.UiKhachHang;
 import view.UiPhuBanHang;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.util.HashMap;
 import javax.swing.ImageIcon;
@@ -391,41 +392,63 @@ public class UIChinh extends javax.swing.JFrame {
 
     private void btnTTKHActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTTKHActionPerformed
         if (khachHangMoiTamThoi != null) {
-            // Gọi phương thức layThongTin() từ đối tượng KhachHang tạm thời
+            // Cập nhật khách hàng hiện tại trong service
+            khachHangService.setKhachHangHienTai(khachHangMoiTamThoi);
+
+            // Lấy thông tin khách hàng kèm yêu cầu dựa trên inventory hiện tại
             String thongTin = khachHangMoiTamThoi.layThongTin();
-            JOptionPane.showMessageDialog(this, thongTin, "Thông Tin Khách", JOptionPane.INFORMATION_MESSAGE);
+            String yeuCau = khachHangService.layYeuCauKhachHangHienTai();
+
+            // Kiểm tra xem người chơi có đủ vật phẩm không
+            String trangThai = khachHangService.kiemTraDuVatPham(playerData.inventory);
+
+            // Hiển thị thông tin đầy đủ
+            String thongTinDayDu = thongTin + "\n\nYÊU CẦU: " + yeuCau + "\n\nTRẠNG THÁI: " + trangThai;
+
+            JOptionPane.showMessageDialog(this, thongTinDayDu, "Thông Tin Khách Hàng", JOptionPane.INFORMATION_MESSAGE);
         } else {
             JOptionPane.showMessageDialog(this, "Chưa có khách hàng nào!", "Lỗi", JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_btnTTKHActionPerformed
 
     private void btnBanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBanActionPerformed
-        if (khachHangMoiTamThoi != null) { // Kiểm tra có khách hàng tạm thời không
-            khachHangService.setKhachHangHienTai(khachHangMoiTamThoi); // Gán KH tạm thời cho service
-            boolean result = khachHangService.xuLyBanHang(true);
+        if (khachHangMoiTamThoi != null) {
+            khachHangService.setKhachHangHienTai(khachHangMoiTamThoi);
+
+            if (!khachHangService.kiemTraCoTheBan(playerData.inventory)) {
+                JOptionPane.showMessageDialog(this,
+                        "Không thể bán! Bạn không có đủ vật phẩm mà khách hàng yêu cầu.",
+                        "Không thể bán",
+                        JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            boolean result = khachHangService.xuLyBanHang(true, playerData.inventory);
             if (result) {
+                // CẬP NHẬT TIỀN NGAY LẬP TỨC
+                loadPlayerData();
                 updateUI();
                 loadRandomImageToButton();
-                khachHangService.setKhachHangHienTai(null); // Reset KH hiện tại
-                khachHangMoiTamThoi = null; // Reset biến tạm thời
+                khachHangMoiTamThoi = null;
             }
-        } else {
-            JOptionPane.showMessageDialog(this, "Chưa có khách hàng nào!", "Lỗi", JOptionPane.WARNING_MESSAGE);
         }
+        jPanel2.setPreferredSize(new Dimension(700, 600));
+
     }//GEN-LAST:event_btnBanActionPerformed
 
     private void btnKhongActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnKhongActionPerformed
-        if (khachHangMoiTamThoi != null) { // Kiểm tra có khách hàng tạm thời không
-            khachHangService.setKhachHangHienTai(khachHangMoiTamThoi); // Gán KH tạm thời cho service
-            boolean result = khachHangService.xuLyBanHang(false);
+        if (khachHangMoiTamThoi != null) {
+            khachHangService.setKhachHangHienTai(khachHangMoiTamThoi);
+
+            // SỬA DÒNG NÀY: thêm playerData.inventory
+            boolean result = khachHangService.xuLyBanHang(false, playerData.inventory);
             if (result) {
                 updateUI();
                 loadRandomImageToButton();
-                khachHangService.setKhachHangHienTai(null); // Reset KH hiện tại
-                khachHangMoiTamThoi = null; // Reset biến tạm thời
+                khachHangMoiTamThoi = null;
+
             }
-        } else {
-            JOptionPane.showMessageDialog(this, "Chưa có khách hàng nào!", "Lỗi", JOptionPane.WARNING_MESSAGE);
+            jPanel2.setPreferredSize(new Dimension(700, 600));
         }
     }//GEN-LAST:event_btnKhongActionPerformed
 
@@ -480,4 +503,5 @@ public class UIChinh extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
     }
+
 }
