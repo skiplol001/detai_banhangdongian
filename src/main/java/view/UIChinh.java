@@ -14,6 +14,7 @@ import view.UiPhuBanHang;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.event.WindowEvent;
 import java.util.HashMap;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -23,6 +24,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
+import util.SoundManager;
 
 /**
  *
@@ -41,11 +43,33 @@ public class UIChinh extends javax.swing.JFrame {
     public UIChinh() {
         initComponents();
         customizeUI();
+        SoundManager.initialize();
+        SoundManager.setMainUIReference(this);
+        SoundManager.playBGM(); // Bắt đầu phát nhạc nền
+
+        // Thêm listener để dọn dẹp khi ứng dụng đóng
+        SoundManager.addAppCloseListener(() -> {
+            // Code dọn dẹp temp files hoặc resources khác
+            System.out.println("Ứng dụng đang đóng, dọn dẹp tài nguyên...");
+        });
         loadPlayerData(); // Phải gọi trước
         khachHangService = new QuanLyKhachHangService(playerData); // Gọi sau khi có playerData
         updateUI();
         initGameTimer();
         loadRandomImageToButton();
+
+        Opening opening = new Opening(this);
+        opening.startOpeningSequence();
+    }
+
+    @Override
+    protected void processWindowEvent(WindowEvent e
+    ) {
+        if (e.getID() == WindowEvent.WINDOW_CLOSING) {
+            // Dọn dẹp SoundManager khi ứng dụng đóng
+            SoundManager.cleanup();
+        }
+        super.processWindowEvent(e);
     }
 
     /**
@@ -215,13 +239,13 @@ public class UIChinh extends javax.swing.JFrame {
                         .addGap(40, 40, 40)
                         .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(28, 28, 28)
-                        .addComponent(btnBan, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(17, 17, 17)
+                        .addComponent(btnBan, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jLabel8)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnKhong)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
                 .addComponent(btnKHTrongNgay)
                 .addContainerGap())
         );
@@ -430,10 +454,12 @@ public class UIChinh extends javax.swing.JFrame {
                 updateUI();
                 loadRandomImageToButton();
                 khachHangMoiTamThoi = null;
+
+                // PHÁT ÂM THANH THÀNH CÔNG
+                SoundManager.playSuccessSound();
             }
         }
-        jPanel2.setPreferredSize(new Dimension(700, 600));
-
+        jPanel2.setPreferredSize(new Dimension(550, 600));
     }//GEN-LAST:event_btnBanActionPerformed
 
     private void btnKhongActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnKhongActionPerformed
@@ -448,7 +474,7 @@ public class UIChinh extends javax.swing.JFrame {
                 khachHangMoiTamThoi = null;
 
             }
-            jPanel2.setPreferredSize(new Dimension(700, 600));
+            jPanel2.setPreferredSize(new Dimension(550, 600));
         }
     }//GEN-LAST:event_btnKhongActionPerformed
 
