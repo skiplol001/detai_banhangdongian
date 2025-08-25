@@ -24,6 +24,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
+import model.GameTimeManager;
 import util.SoundManager;
 
 /**
@@ -33,7 +34,7 @@ import util.SoundManager;
 public class UIChinh extends javax.swing.JFrame {
 
     private TextFileStorage.PlayerData playerData;
-    private Timer gameTimer;
+    private GameTimeManager gameTimeManager;
     private long gameStartTime;
     private final float TIME_SCALE = 0.1f;
     private QuanLyKhachHangService khachHangService;
@@ -55,7 +56,7 @@ public class UIChinh extends javax.swing.JFrame {
         loadPlayerData(); // Phải gọi trước
         khachHangService = new QuanLyKhachHangService(playerData); // Gọi sau khi có playerData
         updateUI();
-        initGameTimer();
+        initGameTimeManager();
         loadRandomImageToButton();
 
         Opening opening = new Opening(this);
@@ -63,9 +64,12 @@ public class UIChinh extends javax.swing.JFrame {
     }
 
     @Override
-    protected void processWindowEvent(WindowEvent e
-    ) {
+    protected void processWindowEvent(WindowEvent e) {
         if (e.getID() == WindowEvent.WINDOW_CLOSING) {
+            // Dừng timer khi đóng ứng dụng
+            if (gameTimeManager != null && gameTimeManager.isTimerRunning()) {
+                gameTimeManager.stopTimer();
+            }
             // Dọn dẹp SoundManager khi ứng dụng đóng
             SoundManager.cleanup();
         }
@@ -357,25 +361,6 @@ public class UIChinh extends javax.swing.JFrame {
     private void updateUI() {
         jLabel6.setText(String.valueOf(playerData.money));
         jLabel8.setText(String.valueOf(playerData.mentalPoints));
-    }
-
-    private void initGameTimer() {
-        gameStartTime = System.currentTimeMillis();
-        gameTimer = new Timer(10, e -> updateGameTime());
-        gameTimer.start();
-    }
-
-    private void updateGameTime() {
-        long realTimeElapsed = System.currentTimeMillis() - gameStartTime;
-        long gameTimeElapsed = (long) (realTimeElapsed * TIME_SCALE);
-        long totalSeconds = gameTimeElapsed / 10;
-        long minutes = (totalSeconds / 6) % 60;
-        long hours = totalSeconds / 360;
-        String timeString = String.format("%02d:%02d", hours, minutes);
-        SwingUtilities.invokeLater(() -> {
-            jLabel4.setText(timeString);
-        });
-
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void btnKHTrongNgayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnKHTrongNgayActionPerformed
@@ -530,4 +515,65 @@ public class UIChinh extends javax.swing.JFrame {
         }
     }
 
+    private void initGameTimeManager() {
+        gameTimeManager = new GameTimeManager();
+
+        // Thiết lập listener để cập nhật UI khi thời gian thay đổi
+        gameTimeManager.setUpdateListener(new GameTimeManager.TimeUpdateListener() {
+            @Override
+            public void onTimeUpdate(String timeString, int currentHour, boolean isNight) {
+                SwingUtilities.invokeLater(() -> {
+                    jLabel4.setText(timeString);
+                    // Có thể thêm hiệu ứng đêm nếu cần
+                    if (isNight) {
+                        // Áp dụng hiệu ứng đêm cho UI
+                    }
+                });
+            }
+        });
+        gameTimeManager.setDayEndListener(new GameTimeManager.DayEndListener() {
+            @Override
+            public void onDayEnd() {
+                SwingUtilities.invokeLater(() -> {
+                    endDaySequence();
+                });
+            }
+        });
+
+        // Bắt đầu đếm thời gian
+        gameTimeManager.startTimer();
+    }
+
+    private void endDaySequence() {
+        // Hiển thị thông báo kết thúc ngày
+        JOptionPane.showMessageDialog(this,
+                "Đã hết ngày! Cửa hàng đóng cửa.",
+                "Kết thúc ngày",
+                JOptionPane.INFORMATION_MESSAGE);
+        TextFileStorage.savePlayerData(playerData);
+
+        // Hiển thị bảng tổng kết ngày
+        showDaySummary();
+
+        // Chuẩn bị cho ngày mới
+        prepareForNewDay();
+    }
+
+    private void showDaySummary() {
+        JOptionPane.showMessageDialog(this,
+                "Tổng kết ngày:\n"
+                + "Doanh thu: " + calculateDailyRevenue() + "\n"
+                + "Điểm tinh thần: " + playerData.mentalPoints,
+                "Tổng kết ngày",
+                JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    private void prepareForNewDay() {
+        gameTimeManager.restartTimer();
+        updateUI();
+    }
+
+    private int calculateDailyRevenue() {
+        return 0;
+    }
 }
