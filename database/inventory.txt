@@ -1,5 +1,5 @@
 Nước,1
-Thuốc,4
-Nước suối,5
-Snack,4
-Bánh mì,8
+Thuốc,1
+Nước suối,3
+Snack,2
+Bánh mì,6

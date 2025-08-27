@@ -8,8 +8,8 @@ import util.GameStateManager;
 
 /**
  * Lớp Opening hiển thị các thông báo giới thiệu gameplay và một chuỗi hội thoại
- * bí ẩn trước khi người chơi bắt đầu trò chơi chính.
- * Chỉ chạy tutorial một lần duy nhất cho mỗi người dùng.
+ * bí ẩn trước khi người chơi bắt đầu trò chơi chính. Chỉ chạy tutorial một lần
+ * duy nhất cho mỗi người dùng.
  */
 public class Opening {
 
@@ -20,9 +20,11 @@ public class Opening {
     private final String[] gameplayMessages = {
         "Chào mừng đến với Cửa Hàng Hoang!",
         "Đây là nơi bạn sẽ quản lý một cửa hàng kỳ lạ...",
-        "Nút 'KH trong ngày': Xem danh sách khách hàng sẽ ghé thăm",
-        "Nút 'Thông tin KH': Xem thông tin chi tiết về khách hàng hiện tại",
-        "Nút hình ảnh: Tạo khách hàng mới ngẫu nhiên",
+        "Cậu có thấy?... chiếc lư hương góc trái màn hình không?",
+        "Chiếc lư hương này sẽ bói mệnh giúp cậu xem được thông tin người trước mặt",
+        "Quyển số tay góc phải màn hình...",
+        "Quyển số tay ghi chép thông tin của người",
+        "Cậu có thấy vị khách trước mặt không?Ấn vào cậu có thể xem yêu cầu của họ",
         "Nút 'bán': Bán vật phẩm cho khách hàng nếu bạn có đủ",
         "Nút 'không': Từ chối giao dịch với khách hàng",
         "Nút 'Cửa Hàng': Mở cửa hàng để mua vật phẩm mới",
@@ -85,21 +87,21 @@ public class Opening {
         errorDialog.setLayout(new BorderLayout());
         errorDialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
         errorDialog.setLocationRelativeTo(mainUI);
-        
+
         // Tạo nội dung thông báo lỗi
         JLabel errorLabel = new JLabel("Lỗi kết nối hệ thống... Đang thử kết nối lại...", JLabel.CENTER);
         errorLabel.setForeground(Color.RED);
         errorLabel.setFont(new Font("Arial", Font.BOLD, 14));
-        
+
         JProgressBar progressBar = new JProgressBar();
         progressBar.setIndeterminate(true); // Thanh tiến trình không xác định
-        
+
         errorDialog.add(errorLabel, BorderLayout.CENTER);
         errorDialog.add(progressBar, BorderLayout.SOUTH);
-        
+
         // Hiển thị dialog
         errorDialog.setVisible(true);
-        
+
         // Tạo timer để đóng dialog sau 5 giây
         Timer errorTimer = new Timer(5000, new ActionListener() {
             @Override
@@ -192,17 +194,55 @@ public class Opening {
     /**
      * Phương thức chính để bắt đầu trình tự opening
      */
+    private void showReturnChoice() {
+        int response = JOptionPane.showOptionDialog(mainUI,
+                "Cậu quay lại rồi à? Cậu muốn ở lại hay rời đi?",
+                "Quyết định",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                new Object[]{"Ở lại", "Rời đi"}, // Hiển thị tiếng Việt
+                "Ở lại");
+
+        if (response == JOptionPane.YES_OPTION) {
+            // Người chơi chọn ở lại
+            JOptionPane.showMessageDialog(mainUI,
+                    "Cảm ơn cậu đã quay lại... Hãy bắt đầu nào!",
+                    "Lời cảm ơn",
+                    JOptionPane.INFORMATION_MESSAGE);
+            GameStateManager.saveUserChoice(false);
+
+            // Kích hoạt UI chính sau khi hoàn thành
+            mainUI.setEnabled(true);
+            mainUI.toFront();
+        } else {
+            // Người chơi chọn rời đi
+            JOptionPane.showMessageDialog(mainUI,
+                    "Tôi tôn trọng quyết định của cậu... tạm biệt",
+                    "Lời tạm biệt",
+                    JOptionPane.INFORMATION_MESSAGE);
+            GameStateManager.saveUserChoice(true);
+
+            // Đóng ứng dụng sau 2 giây
+            Timer exitTimer = new Timer(1000, new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    System.exit(0);
+                }
+            });
+            exitTimer.setRepeats(false);
+            exitTimer.start();
+        }
+    }
+
+    /**
+     * Phương thức chính để bắt đầu trình tự opening
+     */
     public void startOpeningSequence() {
         // Kiểm tra xem người dùng đã từ chối trong lần trước không
         if (GameStateManager.hasUserRefusedBefore()) {
-            JOptionPane.showMessageDialog(mainUI,
-                    "Cậu thay đổi lựa chọn nhỉ...",
-                    "Quay lại",
-                    JOptionPane.INFORMATION_MESSAGE);
-
-            // Kích hoạt UI chính ngay lập tức, bỏ qua tutorial
-            mainUI.setEnabled(true);
-            mainUI.toFront();
+            // Hiển thị lựa chọn cho người chơi đã từ chối trước đó
+            showReturnChoice();
             return;
         }
 

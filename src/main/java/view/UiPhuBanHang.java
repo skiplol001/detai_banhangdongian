@@ -171,29 +171,39 @@ public class UiPhuBanHang extends javax.swing.JFrame {
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jPanel1.setForeground(new java.awt.Color(102, 255, 255));
 
-        label1.setText("Danh sách vật phẩm (mua)");
+        label1.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        label1.setText("CỬA HÀNG TIỆN LỢI");
         label1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         jPanel2.setBackground(new java.awt.Color(153, 255, 255));
 
-        jLabel1.setText("Bánh mì - giá: 50");
+        jLabel1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel1.setText("Bánh mì - Giá: 50$");
 
-        jLabel2.setText("Nước suối - giá: 100");
+        jLabel2.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel2.setText("Nước suối - Giá: 100$");
 
-        jLabel3.setText("Thuốc - giá: 250");
+        jLabel3.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel3.setText("Thuốc - Giá: 250$");
         jLabel3.setAlignmentY(getAlignmentY());
 
-        jLabel4.setText("Snack - giá: 20");
+        jLabel4.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel4.setText("Snack - Giá: 20$");
 
-        btnNuoc.setText("mua - nước suối x1");
+        btnNuoc.setFont(new java.awt.Font("Arial", 2, 12)); // NOI18N
+        btnNuoc.setText("Mua - Nước suối x1");
 
-        btnthuoc.setText("mua - thuốc x1");
+        btnthuoc.setFont(new java.awt.Font("Arial", 2, 12)); // NOI18N
+        btnthuoc.setText("Mua - Thuốc x1");
 
-        btnBanhmi.setText("mua - bánh mì x1");
+        btnBanhmi.setFont(new java.awt.Font("Arial", 2, 12)); // NOI18N
+        btnBanhmi.setText("Mua - Bánh mì x1");
 
-        btnSnack.setText("mua - snack x1");
+        btnSnack.setFont(new java.awt.Font("Arial", 2, 12)); // NOI18N
+        btnSnack.setText("Mua - Snack x1");
 
-        btnBan.setText("bán vật phẩm");
+        btnBan.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        btnBan.setText("BÁN VẬT PHẨM");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -206,7 +216,7 @@ public class UiPhuBanHang extends javax.swing.JFrame {
                     .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 48, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnNuoc, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnthuoc, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -235,7 +245,7 @@ public class UiPhuBanHang extends javax.swing.JFrame {
                     .addComponent(btnthuoc, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(btnSnack, javax.swing.GroupLayout.DEFAULT_SIZE, 48, Short.MAX_VALUE)
+                    .addComponent(btnSnack, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
                     .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(16, 16, 16)
                 .addComponent(btnBan, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -251,7 +261,7 @@ public class UiPhuBanHang extends javax.swing.JFrame {
                 .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(118, 118, 118)
+                .addGap(136, 136, 136)
                 .addComponent(label1)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );

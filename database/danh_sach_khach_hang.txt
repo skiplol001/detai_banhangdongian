@@ -1,5 +1,5 @@
-Liễu Như Yên,108,Nữ,V7129,true
-Tạ Minh Kha,30,Nam,KH002,false
-Tiểu Lạc,105,Nữ,V6998,true
-Shyn Mụi Mụi,116,Nữ,V3193,true
-Tăng Quốc Cường,28,Nam,KH005,false
+Liễu Như Yên,25,Nữ,KH001,false
+Tạ Minh Kha,108,Nam,V2389,true
+Tiểu Lạc,18,Nữ,KH003,false
+Shyn Mụi Mụi,20,Nữ,KH004,false
+Tăng Quốc Cường,128,Nam,V3341,true

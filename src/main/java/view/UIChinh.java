@@ -4,6 +4,7 @@
  */
 package view;
 
+import java.awt.BorderLayout;
 import view.MaQuaiTheme;
 import model.KhachHang;
 import model.QuanLyKhachHangService;
@@ -16,12 +17,15 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.WindowEvent;
 import java.util.HashMap;
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.OverlayLayout;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 import model.GameTimeManager;
@@ -47,7 +51,7 @@ public class UIChinh extends javax.swing.JFrame {
         SoundManager.initialize();
         SoundManager.setMainUIReference(this);
         SoundManager.playBGM(); // Bắt đầu phát nhạc nền
-
+        setupPanelBackground(jPanel1);
         // Thêm listener để dọn dẹp khi ứng dụng đóng
         SoundManager.addAppCloseListener(() -> {
             // Code dọn dẹp temp files hoặc resources khác
@@ -96,9 +100,9 @@ public class UIChinh extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         btnAnh = new javax.swing.JButton();
-        jPanel4 = new javax.swing.JPanel();
-        btnKHTrongNgay = new javax.swing.JButton();
+        jPanel5 = new javax.swing.JPanel();
         btnTTKH = new javax.swing.JButton();
+        btnKHTrongNgay = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         btnBan = new javax.swing.JButton();
@@ -111,16 +115,22 @@ public class UIChinh extends javax.swing.JFrame {
         jPanel2.setBackground(new java.awt.Color(204, 255, 255));
         jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
+        jLabel1.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel1.setText("Tên:");
 
+        jLabel2.setFont(new java.awt.Font("Arial", 2, 12)); // NOI18N
         jLabel2.setText("Player");
 
+        jLabel3.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel3.setText("Thời gian:");
 
+        jLabel4.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel4.setText("00:00");
 
+        jLabel5.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel5.setText("Tiền:");
 
+        jLabel6.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel6.setText("0000");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
@@ -132,11 +142,11 @@ public class UIChinh extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel2)
-                .addGap(103, 103, 103)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(233, 233, 233)
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel6)
@@ -156,7 +166,8 @@ public class UIChinh extends javax.swing.JFrame {
                 .addContainerGap(10, Short.MAX_VALUE))
         );
 
-        jButton1.setText("Cửa Hàng");
+        jButton1.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jButton1.setText("CỬA HÀNG TIỆN LỢI");
         jButton1.setActionCommand("btnShop");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -166,6 +177,7 @@ public class UIChinh extends javax.swing.JFrame {
 
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
+        btnAnh.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         btnAnh.setText("jButton2");
         btnAnh.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -177,46 +189,53 @@ public class UIChinh extends javax.swing.JFrame {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(136, 136, 136)
-                .addComponent(btnAnh, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnAnh, javax.swing.GroupLayout.PREFERRED_SIZE, 252, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(241, 241, 241))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(btnAnh, javax.swing.GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE)
+                .addComponent(btnAnh, javax.swing.GroupLayout.DEFAULT_SIZE, 301, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
-        jPanel4.setBackground(new java.awt.Color(204, 255, 255));
-
-        btnKHTrongNgay.setText("KH trong ngày");
-        btnKHTrongNgay.setToolTipText("");
-        btnKHTrongNgay.setActionCommand("btnKHTrongNgay");
-        btnKHTrongNgay.setName("btnKHTrongNgay"); // NOI18N
-        btnKHTrongNgay.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnKHTrongNgayActionPerformed(evt);
-            }
-        });
-
+        btnTTKH.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         btnTTKH.setText("Thông tin KH");
         btnTTKH.setToolTipText("");
         btnTTKH.setActionCommand("btnThongTinKH");
+        btnTTKH.setMaximumSize(new java.awt.Dimension(270, 150));
+        btnTTKH.setPreferredSize(new java.awt.Dimension(270, 150));
         btnTTKH.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnTTKHActionPerformed(evt);
             }
         });
 
+        btnKHTrongNgay.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        btnKHTrongNgay.setText("KH trong ngày");
+        btnKHTrongNgay.setToolTipText("");
+        btnKHTrongNgay.setActionCommand("btnKHTrongNgay");
+        btnKHTrongNgay.setMaximumSize(new java.awt.Dimension(270, 150));
+        btnKHTrongNgay.setName("btnKHTrongNgay"); // NOI18N
+        btnKHTrongNgay.setPreferredSize(new java.awt.Dimension(270, 150));
+        btnKHTrongNgay.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnKHTrongNgayActionPerformed(evt);
+            }
+        });
+
+        jLabel7.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel7.setText("Điểm Tinh Thần Hiện Tại");
         jLabel7.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
+        jLabel8.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel8.setText("100");
         jLabel8.setBorder(javax.swing.BorderFactory.createEtchedBorder(new java.awt.Color(255, 102, 0), null));
 
+        btnBan.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         btnBan.setText("bán");
         btnBan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -224,6 +243,7 @@ public class UIChinh extends javax.swing.JFrame {
             }
         });
 
+        btnKhong.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         btnKhong.setText("không");
         btnKhong.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -231,46 +251,50 @@ public class UIChinh extends javax.swing.JFrame {
             }
         });
 
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
-        jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(btnTTKH)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(40, 40, 40)
+                .addComponent(btnTTKH, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addGap(36, 36, 36)
                         .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(17, 17, 17)
-                        .addComponent(btnBan, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel8)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnKhong)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
-                .addComponent(btnKHTrongNgay)
+                    .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel5Layout.createSequentialGroup()
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(btnBan, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 50, Short.MAX_VALUE)
+                            .addComponent(btnKhong, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel5Layout.createSequentialGroup()
+                            .addGap(100, 100, 100)
+                            .addComponent(jLabel8))))
+                .addGap(8, 8, 8)
+                .addComponent(btnKHTrongNgay, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
-        jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(25, 25, 25)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnKHTrongNgay, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnTTKH, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(10, Short.MAX_VALUE))
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel7)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addGap(17, 17, 17)
+                        .addComponent(jLabel7)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 54, Short.MAX_VALUE)
                         .addComponent(jLabel8)
-                        .addComponent(btnKhong))
-                    .addComponent(btnBan))
-                .addGap(9, 9, 9))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnBan, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnKhong, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel5Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnKHTrongNgay, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                            .addComponent(btnTTKH, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))))
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -280,14 +304,16 @@ public class UIChinh extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(162, 162, 162)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(166, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton1)
+                .addGap(286, 286, 286))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -299,8 +325,8 @@ public class UIChinh extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         setJMenuBar(menuBar);
@@ -309,21 +335,129 @@ public class UIChinh extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnKhongActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnKhongActionPerformed
+        if (khachHangMoiTamThoi != null) {
+            khachHangService.setKhachHangHienTai(khachHangMoiTamThoi);
+
+            // SỬA DÒNG NÀY: thêm playerData.inventory
+            boolean result = khachHangService.xuLyBanHang(false, playerData.inventory);
+            if (result) {
+                updateUI();
+                // QUAN TRỌNG: Reset kích thước trước khi load ảnh mới
+                fixButtonSize(btnAnh, 252, 301);
+
+                loadRandomImageToButton();
+                khachHangMoiTamThoi = null;
+
+            }
+            jPanel2.setPreferredSize(new Dimension(550, 600));
+        }
+    }//GEN-LAST:event_btnKhongActionPerformed
+
+    private void btnBanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBanActionPerformed
+        if (khachHangMoiTamThoi != null) {
+            khachHangService.setKhachHangHienTai(khachHangMoiTamThoi);
+
+            if (!khachHangService.kiemTraCoTheBan(playerData.inventory)) {
+                JOptionPane.showMessageDialog(this,
+                        "Không thể bán! Bạn không có đủ vật phẩm mà khách hàng yêu cầu.",
+                        "Không thể bán",
+                        JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            boolean result = khachHangService.xuLyBanHang(true, playerData.inventory);
+            if (result) {
+                // CẬP NHẬT TIỀN NGAY LẬP TỨC
+                loadPlayerData();
+                updateUI();
+                // QUAN TRỌNG: Reset kích thước trước khi load ảnh mới
+                fixButtonSize(btnAnh, 252, 301);
+                loadRandomImageToButton();
+                khachHangMoiTamThoi = null;
+
+                // PHÁT ÂM THANH THÀNH CÔNG
+                SoundManager.playSuccessSound();
+            }
+        }
+        jPanel2.setPreferredSize(new Dimension(550, 600));
+    }//GEN-LAST:event_btnBanActionPerformed
+
+    private void btnKHTrongNgayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnKHTrongNgayActionPerformed
+        try {
+            SwingUtilities.invokeLater(() -> {
+                UiKhachHang giaoDienKH = new UiKhachHang();
+                giaoDienKH.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                giaoDienKH.setVisible(true);
+            });
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Lỗi khi mở giao diện khách hàng: " + e.getMessage(),
+                    "Lỗi", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnKHTrongNgayActionPerformed
+
+    private void btnTTKHActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTTKHActionPerformed
+        if (khachHangMoiTamThoi != null) {
+            // Cập nhật khách hàng hiện tại trong service
+            khachHangService.setKhachHangHienTai(khachHangMoiTamThoi);
+
+            // Lấy thông tin khách hàng kèm yêu cầu dựa trên inventory hiện tại
+            String thongTin = khachHangMoiTamThoi.layThongTin();
+            String yeuCau = khachHangService.layYeuCauKhachHangHienTai();
+
+            // Kiểm tra xem người chơi có đủ vật phẩm không
+            String trangThai = khachHangService.kiemTraDuVatPham(playerData.inventory);
+
+            // Hiển thị thông tin đầy đủ
+            String thongTinDayDu = thongTin + "\n\nYÊU CẦU: " + yeuCau + "\n\nTRẠNG THÁI: " + trangThai;
+
+            JOptionPane.showMessageDialog(this, thongTinDayDu, "Thông Tin Khách Hàng", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(this, "Chưa có khách hàng nào!", "Lỗi", JOptionPane.WARNING_MESSAGE);
+        }
+    }//GEN-LAST:event_btnTTKHActionPerformed
+
+    private void btnAnhActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnhActionPerformed
+        // Chỉ tạo khách hàng mới nếu không có khách hàng tạm thời nào đang chờ
+        if (khachHangMoiTamThoi == null) {
+            // Tạo khách hàng mới và gán vào biến tạm thời
+            khachHangMoiTamThoi = khachHangService.taoKhachHangMoi();
+
+            if (khachHangMoiTamThoi != null) {
+                String yeuCau = khachHangMoiTamThoi.getTen() + " nói: " + khachHangService.layYeuCauKhachHangHienTai();
+
+                // Hiển thị yêu cầu khách hàng qua JOptionPane
+                JOptionPane.showMessageDialog(
+                        this,
+                        yeuCau,
+                        "Khách hàng mới",
+                        JOptionPane.INFORMATION_MESSAGE
+                );
+
+                // TẢI ẢNH THEO GIỚI TÍNH CỦA KHÁCH HÀNG
+                loadRandomImageToButton();
+            }
+        } else {
+            // Thông báo cho người dùng rằng có khách hàng đang chờ
+            JOptionPane.showMessageDialog(this, "Có một khách hàng đang chờ rồi!", "Lỗi", JOptionPane.WARNING_MESSAGE);
+        }
+    }//GEN-LAST:event_btnAnhActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         this.setEnabled(false);
@@ -363,106 +497,6 @@ public class UIChinh extends javax.swing.JFrame {
         jLabel8.setText(String.valueOf(playerData.mentalPoints));
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void btnKHTrongNgayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnKHTrongNgayActionPerformed
-        try {
-            SwingUtilities.invokeLater(() -> {
-                UiKhachHang giaoDienKH = new UiKhachHang();
-                giaoDienKH.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                giaoDienKH.setVisible(true);
-            });
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Lỗi khi mở giao diện khách hàng: " + e.getMessage(),
-                    "Lỗi", JOptionPane.ERROR_MESSAGE);
-        }
-    }//GEN-LAST:event_btnKHTrongNgayActionPerformed
-
-    private void btnAnhActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnhActionPerformed
-        // Chỉ tạo khách hàng mới nếu không có khách hàng tạm thời nào đang chờ
-        if (khachHangMoiTamThoi == null) {
-            // Tạo khách hàng mới và gán vào biến tạm thời
-            khachHangMoiTamThoi = khachHangService.taoKhachHangMoi();
-
-            if (khachHangMoiTamThoi != null) {
-                String yeuCau = khachHangMoiTamThoi.getTen() + " nói: " + khachHangService.layYeuCauKhachHangHienTai();
-
-                // Hiển thị yêu cầu khách hàng qua JOptionPane
-                JOptionPane.showMessageDialog(
-                        this,
-                        yeuCau,
-                        "Khách hàng mới",
-                        JOptionPane.INFORMATION_MESSAGE
-                );
-            }
-        } else {
-            // Thông báo cho người dùng rằng có khách hàng đang chờ
-            JOptionPane.showMessageDialog(this, "Có một khách hàng đang chờ rồi!", "Lỗi", JOptionPane.WARNING_MESSAGE);
-        }
-    }//GEN-LAST:event_btnAnhActionPerformed
-
-    private void btnTTKHActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTTKHActionPerformed
-        if (khachHangMoiTamThoi != null) {
-            // Cập nhật khách hàng hiện tại trong service
-            khachHangService.setKhachHangHienTai(khachHangMoiTamThoi);
-
-            // Lấy thông tin khách hàng kèm yêu cầu dựa trên inventory hiện tại
-            String thongTin = khachHangMoiTamThoi.layThongTin();
-            String yeuCau = khachHangService.layYeuCauKhachHangHienTai();
-
-            // Kiểm tra xem người chơi có đủ vật phẩm không
-            String trangThai = khachHangService.kiemTraDuVatPham(playerData.inventory);
-
-            // Hiển thị thông tin đầy đủ
-            String thongTinDayDu = thongTin + "\n\nYÊU CẦU: " + yeuCau + "\n\nTRẠNG THÁI: " + trangThai;
-
-            JOptionPane.showMessageDialog(this, thongTinDayDu, "Thông Tin Khách Hàng", JOptionPane.INFORMATION_MESSAGE);
-        } else {
-            JOptionPane.showMessageDialog(this, "Chưa có khách hàng nào!", "Lỗi", JOptionPane.WARNING_MESSAGE);
-        }
-    }//GEN-LAST:event_btnTTKHActionPerformed
-
-    private void btnBanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBanActionPerformed
-        if (khachHangMoiTamThoi != null) {
-            khachHangService.setKhachHangHienTai(khachHangMoiTamThoi);
-
-            if (!khachHangService.kiemTraCoTheBan(playerData.inventory)) {
-                JOptionPane.showMessageDialog(this,
-                        "Không thể bán! Bạn không có đủ vật phẩm mà khách hàng yêu cầu.",
-                        "Không thể bán",
-                        JOptionPane.WARNING_MESSAGE);
-                return;
-            }
-
-            boolean result = khachHangService.xuLyBanHang(true, playerData.inventory);
-            if (result) {
-                // CẬP NHẬT TIỀN NGAY LẬP TỨC
-                loadPlayerData();
-                updateUI();
-                loadRandomImageToButton();
-                khachHangMoiTamThoi = null;
-
-                // PHÁT ÂM THANH THÀNH CÔNG
-                SoundManager.playSuccessSound();
-            }
-        }
-        jPanel2.setPreferredSize(new Dimension(550, 600));
-    }//GEN-LAST:event_btnBanActionPerformed
-
-    private void btnKhongActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnKhongActionPerformed
-        if (khachHangMoiTamThoi != null) {
-            khachHangService.setKhachHangHienTai(khachHangMoiTamThoi);
-
-            // SỬA DÒNG NÀY: thêm playerData.inventory
-            boolean result = khachHangService.xuLyBanHang(false, playerData.inventory);
-            if (result) {
-                updateUI();
-                loadRandomImageToButton();
-                khachHangMoiTamThoi = null;
-
-            }
-            jPanel2.setPreferredSize(new Dimension(550, 600));
-        }
-    }//GEN-LAST:event_btnKhongActionPerformed
-
     /**
      * @param args the command line arguments
      */
@@ -485,31 +519,100 @@ public class UIChinh extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
     private javax.swing.JMenuBar menuBar;
     // End of variables declaration//GEN-END:variables
 
     private void customizeUI() {
-        JPanel[] panels = {jPanel1, jPanel2, jPanel3, jPanel4};
+        JPanel[] panels = {jPanel1, jPanel2, jPanel3, jPanel5};
         JLabel[] labels = {jLabel1, jLabel2, jLabel3, jLabel4, jLabel5, jLabel6, jLabel7, jLabel8};
         JButton[] specialButtons = {btnKHTrongNgay, jButton1}; // Các nút màu đỏ máu
-        JButton[] normalButtons = {btnTTKH}; // Các nút màu xanh rêu
+        JButton[] normalButtons = {btnTTKH, btnBan, btnKhong}; // Các nút màu xanh rêu
+        fixButtonSize(btnAnh, 252, 301);
+        // Sử dụng phiên bản simple theme để không thay đổi layout
+        MaQuaiTheme.applySimpleTheme(this, panels, labels, specialButtons, normalButtons);
 
-        MaQuaiTheme.applyTheme(this, panels, labels, specialButtons, normalButtons);
+        // Thiết lập riêng các nút hình ảnh
+        MaQuaiTheme.setupImageButtonForUI(btnKHTrongNgay, "btnKHTN");
+        MaQuaiTheme.setupImageButtonForUI(btnTTKH, "btnTTKH");
 
         // Custom thêm nếu cần
         jLabel2.setFont(new Font("Dialog", Font.BOLD, 14));
         jLabel6.setFont(new Font("Dialog", Font.BOLD, 14));
         jLabel8.setFont(new Font("Dialog", Font.BOLD, 14));
         jLabel8.setForeground(new Color(140, 200, 140));
+
+        // Đặt kích thước frame theo tỉ lệ 9:16
+        this.setSize(880, 960);
+        this.setPreferredSize(new Dimension(880, 960));
+        this.setResizable(false);
+
+        // Thiết lập riêng cho nút ảnh (btnAnh)
+        btnAnh.setBorder(BorderFactory.createEmptyBorder());
+        btnAnh.setContentAreaFilled(false);
+        btnAnh.setFocusPainted(false);
+
+    }
+
+    private void fixButtonSize(JButton button, int width, int height) {
+        button.setPreferredSize(new Dimension(width, height));
+        button.setMinimumSize(new Dimension(width, height));
+        button.setMaximumSize(new Dimension(width, height));
+        button.setSize(new Dimension(width, height));
+    }
+
+    private void setupPanelBackground(JPanel panel) {
+        // Đảm bảo panel có kích thước trước khi tải ảnh
+        panel.setPreferredSize(new Dimension(700, 320));
+
+        // Tải ảnh nền với kích thước phù hợp
+        ImageIcon backgroundIcon = TaiAnhGamePlay.loadBackgroundImage(
+                panel.getPreferredSize().width,
+                panel.getPreferredSize().height
+        );
+
+        // Tạo JLabel chứa ảnh nền
+        JLabel backgroundLabel = new JLabel(backgroundIcon);
+        backgroundLabel.setBounds(0, 0, panel.getWidth(), panel.getHeight());
+
+        // Xóa layout hiện tại và thiết lập layout mới
+        panel.setLayout(new BorderLayout());
+
+        // Thêm backgroundLabel vào panel
+        panel.add(backgroundLabel, BorderLayout.CENTER);
+
+        // Đảm bảo btnAnh hiển thị trên ảnh nền
+        backgroundLabel.setLayout(new OverlayLayout(backgroundLabel));
+        backgroundLabel.add(btnAnh);
+
+        // Căn chỉnh btnAnh
+        btnAnh.setAlignmentX(0.5f);
+        btnAnh.setAlignmentY(0.5f);
     }
 
     private void loadRandomImageToButton() {
         try {
-            ImageIcon randomIcon = TaiAnhGamePlay.loadRandomImage(
-                    btnAnh.getWidth(),
-                    btnAnh.getHeight());
-            btnAnh.setIcon(randomIcon);
+            ImageIcon randomIcon;
+
+            if (khachHangMoiTamThoi != null) {
+                String gioiTinh = khachHangMoiTamThoi.getGioiTinh();
+                randomIcon = TaiAnhGamePlay.loadImageByGender(
+                        gioiTinh,
+                        btnAnh.getWidth(),
+                        btnAnh.getHeight());
+            } else {
+                randomIcon = TaiAnhGamePlay.loadRandomImage(
+                        btnAnh.getWidth(),
+                        btnAnh.getHeight());
+            }
+
+            if (randomIcon != null) {
+                fixButtonSize(btnAnh, 252, 301);
+                btnAnh.setIcon(randomIcon);
+
+                btnAnh.revalidate();
+                btnAnh.repaint();
+            }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
         }

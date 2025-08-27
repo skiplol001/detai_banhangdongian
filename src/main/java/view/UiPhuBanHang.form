@@ -71,7 +71,7 @@
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
               <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace min="-2" pref="118" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="136" max="-2" attributes="0"/>
                   <Component id="label1" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="32767" attributes="0"/>
               </Group>
@@ -92,7 +92,10 @@
       <SubComponents>
         <Component class="javax.swing.JLabel" name="label1">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Danh s&#xe1;ch v&#x1ead;t ph&#x1ea9;m (mua)"/>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Arial" size="12" style="1"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="C&#x1eec;A H&#xc0;NG TI&#x1ec6;N L&#x1ee2;I"/>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
               <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
                 <LineBorder/>
@@ -118,7 +121,7 @@
                           <Component id="jLabel3" alignment="0" max="32767" attributes="0"/>
                           <Component id="jLabel4" max="32767" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="48" max="32767" attributes="0"/>
+                      <EmptySpace pref="36" max="32767" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="btnNuoc" min="-2" pref="208" max="-2" attributes="0"/>
                           <Component id="btnthuoc" min="-2" pref="208" max="-2" attributes="0"/>
@@ -154,7 +157,7 @@
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="2" attributes="0">
-                          <Component id="btnSnack" alignment="2" pref="48" max="32767" attributes="0"/>
+                          <Component id="btnSnack" alignment="2" pref="50" max="32767" attributes="0"/>
                           <Component id="jLabel4" alignment="2" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="16" max="-2" attributes="0"/>
@@ -167,17 +170,26 @@
           <SubComponents>
             <Component class="javax.swing.JLabel" name="jLabel1">
               <Properties>
-                <Property name="text" type="java.lang.String" value="B&#xe1;nh m&#xec; - gi&#xe1;: 50"/>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Arial" size="12" style="0"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="B&#xe1;nh m&#xec; - Gi&#xe1;: 50$"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel2">
               <Properties>
-                <Property name="text" type="java.lang.String" value="N&#x1b0;&#x1edb;c su&#x1ed1;i - gi&#xe1;: 100"/>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Arial" size="12" style="0"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="N&#x1b0;&#x1edb;c su&#x1ed1;i - Gi&#xe1;: 100$"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel3">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Thu&#x1ed1;c - gi&#xe1;: 250"/>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Arial" size="12" style="0"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="Thu&#x1ed1;c - Gi&#xe1;: 250$"/>
                 <Property name="alignmentY" type="float" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                   <Connection component="Form" name="getAlignmentY" type="method"/>
                 </Property>
@@ -185,32 +197,50 @@
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel4">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Snack - gi&#xe1;: 20"/>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Arial" size="12" style="0"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="Snack - Gi&#xe1;: 20$"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JButton" name="btnNuoc">
               <Properties>
-                <Property name="text" type="java.lang.String" value="mua - n&#x1b0;&#x1edb;c su&#x1ed1;i x1"/>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Arial" size="12" style="2"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="Mua - N&#x1b0;&#x1edb;c su&#x1ed1;i x1"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JButton" name="btnthuoc">
               <Properties>
-                <Property name="text" type="java.lang.String" value="mua - thu&#x1ed1;c x1"/>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Arial" size="12" style="2"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="Mua - Thu&#x1ed1;c x1"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JButton" name="btnBanhmi">
               <Properties>
-                <Property name="text" type="java.lang.String" value="mua - b&#xe1;nh m&#xec; x1"/>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Arial" size="12" style="2"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="Mua - B&#xe1;nh m&#xec; x1"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JButton" name="btnSnack">
               <Properties>
-                <Property name="text" type="java.lang.String" value="mua - snack x1"/>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Arial" size="12" style="2"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="Mua - Snack x1"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JButton" name="btnBan">
               <Properties>
-                <Property name="text" type="java.lang.String" value="b&#xe1;n v&#x1ead;t ph&#x1ea9;m"/>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Arial" size="12" style="1"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="B&#xc1;N V&#x1eac;T PH&#x1ea8;M"/>
               </Properties>
             </Component>
           </SubComponents>
