@@ -162,8 +162,8 @@ public class Opening {
 
         if (response == JOptionPane.YES_OPTION) {
             JOptionPane.showMessageDialog(mainUI,
-                    "Cảm ơn cậu... Hãy bắt đầu nào!",
-                    "Lời cảm ơn",
+                    "Thật tốt vì cậu đã ở lại... Hãy bắt đầu thôi!",
+                    "Mừng rỡ",
                     JOptionPane.INFORMATION_MESSAGE);
             GameStateManager.saveUserChoice(false);
             GameStateManager.markTutorialCompleted();
@@ -173,14 +173,14 @@ public class Opening {
             mainUI.toFront();
         } else {
             JOptionPane.showMessageDialog(mainUI,
-                    "Tôi tôn trọng quyết định của cậu... tạm biệt",
-                    "Lời tạm biệt",
+                    "Thật tốt vì cậu đã ở lại... Hãy bắt đầu thôi!",
+                    "Mừng rỡ",
                     JOptionPane.INFORMATION_MESSAGE);
             GameStateManager.saveUserChoice(true);
             GameStateManager.markTutorialCompleted();
 
             // Đóng ứng dụng sau 2 giây
-            Timer exitTimer = new Timer(2000, new ActionListener() {
+            Timer exitTimer = new Timer(1000, new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     System.exit(0);
