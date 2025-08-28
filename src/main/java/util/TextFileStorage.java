@@ -4,6 +4,7 @@ import model.Player;
 import java.io.*;
 import java.nio.file.*;
 import java.util.*;
+import java.nio.charset.StandardCharsets;
 
 public class TextFileStorage {
 
@@ -40,29 +41,55 @@ public class TextFileStorage {
     }
 
     public static PlayerData loadPlayerData() {
-        int money = 0;
+        int money = 1000;
         int mentalPoints = 100;
         Map<String, Integer> inventory = new HashMap<>();
 
         try {
+            // Tự động sửa file inventory trước khi đọc
+            validateAndFixInventoryFile();
+
+            // Đọc file player_data.txt
             if (Files.exists(Paths.get(PLAYER_FILE))) {
                 List<String> playerLines = Files.readAllLines(Paths.get(PLAYER_FILE));
-                if (playerLines.size() >= 2) {
-                    money = Integer.parseInt(playerLines.get(0));
-                    mentalPoints = Integer.parseInt(playerLines.get(1));
-                }
-            }
 
-            if (Files.exists(Paths.get(INVENTORY_FILE))) {
-                List<String> inventoryLines = Files.readAllLines(Paths.get(INVENTORY_FILE));
-                for (String line : inventoryLines) {
-                    String[] parts = line.split(",");
-                    if (parts.length == 2) {
-                        inventory.put(parts[0], Integer.valueOf(parts[1]));
+                if (playerLines.size() >= 1 && !playerLines.get(0).trim().isEmpty()) {
+                    try {
+                        money = Integer.parseInt(playerLines.get(0).trim());
+                    } catch (NumberFormatException e) {
+                        System.err.println("Lỗi parse money, sử dụng mặc định: 1000");
+                    }
+                }
+
+                if (playerLines.size() >= 2 && !playerLines.get(1).trim().isEmpty()) {
+                    try {
+                        mentalPoints = Integer.parseInt(playerLines.get(1).trim());
+                    } catch (NumberFormatException e) {
+                        System.err.println("Lỗi parse mentalPoints, sử dụng mặc định: 100");
                     }
                 }
             }
-        } catch (IOException | NumberFormatException e) {
+
+            // Đọc file inventory.txt (đã được validate)
+            if (Files.exists(Paths.get(INVENTORY_FILE))) {
+                List<String> inventoryLines = Files.readAllLines(Paths.get(INVENTORY_FILE));
+
+                for (String line : inventoryLines) {
+                    if (line != null && !line.trim().isEmpty()) {
+                        String[] parts = line.split(",");
+                        if (parts.length == 2) {
+                            try {
+                                String itemName = parts[0].trim();
+                                int quantity = Integer.parseInt(parts[1].trim());
+                                inventory.put(itemName, quantity);
+                            } catch (NumberFormatException e) {
+                                System.err.println("Lỗi parse inventory: " + line);
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (IOException e) {
             System.err.println("Lỗi đọc dữ liệu: " + e.getMessage());
         }
 
@@ -73,7 +100,7 @@ public class TextFileStorage {
     public static void savePlayerData(PlayerData playerData) {
         try {
             Files.write(Paths.get(PLAYER_FILE),
-                    (playerData.money + "\n" + playerData.mentalPoints).getBytes(),
+                    (playerData.money + "\n" + playerData.mentalPoints).getBytes(StandardCharsets.UTF_8), // Thêm StandardCharsets.UTF_8
                     StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
 
             StringBuilder inventoryContent = new StringBuilder();
@@ -81,7 +108,7 @@ public class TextFileStorage {
                 inventoryContent.append(entry.getKey()).append(",").append(entry.getValue()).append("\n");
             }
             Files.write(Paths.get(INVENTORY_FILE),
-                    inventoryContent.toString().getBytes(),
+                    inventoryContent.toString().getBytes(StandardCharsets.UTF_8), // Thêm StandardCharsets.UTF_8
                     StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
         } catch (IOException e) {
             System.err.println("Lỗi lưu dữ liệu: " + e.getMessage());
@@ -92,7 +119,7 @@ public class TextFileStorage {
     public static void savePlayerData(Player player) {
         try {
             Files.write(Paths.get(PLAYER_FILE),
-                    (player.getMoney() + "\n" + player.getMentalPoints()).getBytes(),
+                    (player.getMoney() + "\n" + player.getMentalPoints()).getBytes(StandardCharsets.UTF_8), // Thêm StandardCharsets.UTF_8
                     StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
 
             StringBuilder inventoryContent = new StringBuilder();
@@ -100,10 +127,71 @@ public class TextFileStorage {
                 inventoryContent.append(entry.getKey()).append(",").append(entry.getValue()).append("\n");
             }
             Files.write(Paths.get(INVENTORY_FILE),
-                    inventoryContent.toString().getBytes(),
+                    inventoryContent.toString().getBytes(StandardCharsets.UTF_8), // Thêm StandardCharsets.UTF_8
                     StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
         } catch (IOException e) {
             System.err.println("Lỗi lưu dữ liệu: " + e.getMessage());
+        }
+    }
+
+    public static boolean validateAndFixInventoryFile() {
+        try {
+            Path inventoryPath = Paths.get(INVENTORY_FILE);
+
+            // Nếu file không tồn tại, tạo file mới
+            if (!Files.exists(inventoryPath)) {
+                Files.write(inventoryPath, "".getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE);
+                return true;
+            }
+
+            // Đọc và kiểm tra từng dòng
+            List<String> lines = Files.readAllLines(inventoryPath, StandardCharsets.UTF_8);
+            List<String> validLines = new ArrayList<>();
+
+            for (String line : lines) {
+                if (line != null && !line.trim().isEmpty()) {
+                    String[] parts = line.split(",");
+                    if (parts.length == 2) {
+                        try {
+                            // Kiểm tra nếu số lượng là số hợp lệ
+                            Integer.parseInt(parts[1].trim());
+                            validLines.add(line);
+                        } catch (NumberFormatException e) {
+                            System.err.println("Bỏ qua dòng không hợp lệ: " + line);
+                        }
+                    } else {
+                        System.err.println("Bỏ qua dòng không đúng định dạng: " + line);
+                    }
+                }
+            }
+
+            // Ghi lại chỉ các dòng hợp lệ
+            Files.write(inventoryPath, validLines, StandardCharsets.UTF_8, StandardOpenOption.TRUNCATE_EXISTING);
+            return true;
+        } catch (IOException e) {
+            System.err.println("Lỗi kiểm tra file inventory: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public static void resetInventoryFile() {
+        try {
+            Path inventoryPath = Paths.get(INVENTORY_FILE);
+            Files.deleteIfExists(inventoryPath);
+            Files.write(inventoryPath, "".getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE); // Ghi với UTF-8
+            System.out.println("Đã reset file inventory");
+        } catch (IOException e) {
+            System.err.println("Lỗi reset inventory: " + e.getMessage());
+        }
+    }
+
+    public static void resetAllData() {
+        try {
+            Files.deleteIfExists(Paths.get(PLAYER_FILE));
+            Files.deleteIfExists(Paths.get(INVENTORY_FILE));
+            System.out.println("Đã reset tất cả dữ liệu");
+        } catch (IOException e) {
+            System.err.println("Lỗi reset dữ liệu: " + e.getMessage());
         }
     }
 }

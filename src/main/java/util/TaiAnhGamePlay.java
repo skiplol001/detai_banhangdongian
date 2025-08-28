@@ -18,11 +18,11 @@ public class TaiAnhGamePlay {
     static {
         // Thêm các ảnh vào danh sách
         imagePaths.add("/img/0_0.jpg"); // Ảnh nền
-        imagePaths.add("/img/1_1.jpg"); // Ảnh 1 - nam
-        imagePaths.add("/img/2_1.jpg"); // Ảnh 2 - nam
-        imagePaths.add("/img/3_0.jpg"); // Ảnh 3 - nữ
-        imagePaths.add("/img/4_0.jpg"); // Ảnh 4 - nữ
-        imagePaths.add("/img/5_0.jpg"); // Ảnh 5 - nữ
+        imagePaths.add("/img/1_1.png"); // Ảnh 1 - nam
+        imagePaths.add("/img/2_1.png"); // Ảnh 2 - nam
+        imagePaths.add("/img/3_0.png"); // Ảnh 3 - nữ
+        imagePaths.add("/img/4_0.png"); // Ảnh 4 - nữ
+        imagePaths.add("/img/5_0.png"); // Ảnh 5 - nữ
         // Có thể thêm nhiều ảnh khác theo cùng định dạng
     }
 
