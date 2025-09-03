@@ -7,6 +7,10 @@ import java.util.HashMap;
 import java.util.Collections;
 import java.util.Arrays;
 import util.TextFileStorage;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.util.ArrayList;
 
 public class QuanLyKhachHangService {
 
@@ -15,24 +19,89 @@ public class QuanLyKhachHangService {
     private final TextFileStorage.PlayerData playerData;
     private final Random random;
 
-    private final String[] danhSachVatPham = {
-        "Snack", "Thuốc", "Nước suối", "Bánh mì"
-    };
+    private List<String> danhSachVatPham;
+    private Map<String, Integer> giaVatPham;
 
     public QuanLyKhachHangService(TextFileStorage.PlayerData playerData) {
         this.quanLyKH = new QuanLyKhachHang();
         this.playerData = playerData;
         this.random = new Random();
+        this.danhSachVatPham = new ArrayList<>();
+        this.giaVatPham = new HashMap<>();
+        taiDanhSachVatPhamTuFile();
+    }
+
+    private void taiDanhSachVatPhamTuFile() {
+        try {
+            // Sử dụng đường dẫn tương đối
+            File file = new File("database/vatpham.txt");
+            if (!file.exists()) {
+                file = new File("../database/vatpham.txt"); // Thử đường dẫn khác nếu cần
+            }
+
+            List<String> lines = Files.readAllLines(file.toPath());
+
+            for (String line : lines) {
+                // Bỏ qua dòng trống và dòng comment
+                String trimmedLine = line.trim();
+                if (!trimmedLine.isEmpty() && !trimmedLine.startsWith("#")) {
+                    // Tách tên vật phẩm và giá bằng dấu :
+                    String[] parts = trimmedLine.split(":");
+                    if (parts.length == 2) {
+                        String tenVatPham = parts[0].trim();
+                        try {
+                            int gia = Integer.parseInt(parts[1].trim());
+                            danhSachVatPham.add(tenVatPham);
+                            giaVatPham.put(tenVatPham, gia);
+                        } catch (NumberFormatException e) {
+                            System.err.println("Lỗi định dạng giá trong file: " + trimmedLine);
+                        }
+                    }
+                }
+            }
+
+            // Nếu file rỗng, sử dụng danh sách mặc định
+            if (danhSachVatPham.isEmpty()) {
+                danhSachVatPham = Arrays.asList("Snack", "Thuốc", "Nước suối", "Bánh mì");
+                giaVatPham.put("Snack", 20);
+                giaVatPham.put("Thuốc", 100);
+                giaVatPham.put("Nước suối", 30);
+                giaVatPham.put("Bánh mì", 50);
+                System.out.println("Sử dụng danh sách vật phẩm mặc định");
+            }
+
+        } catch (IOException e) {
+            System.err.println("Lỗi khi đọc file vatpham.txt: " + e.getMessage());
+            // Fallback: sử dụng danh sách mặc định nếu không đọc được file
+            danhSachVatPham = Arrays.asList("Snack", "Thuốc", "Nước suối", "Bánh mì");
+            giaVatPham.put("Snack", 20);
+            giaVatPham.put("Thuốc", 100);
+            giaVatPham.put("Nước suối", 30);
+            giaVatPham.put("Bánh mì", 50);
+            System.out.println("Sử dụng danh sách vật phẩm mặc định do lỗi đọc file");
+        }
     }
 
     private HashMap<String, Integer> generateRandomYeuCauMap() {
         HashMap<String, Integer> requiredItems = new HashMap<>();
-        List<String> vatPhamList = Arrays.asList(danhSachVatPham);
-        Collections.shuffle(vatPhamList);
-        int soLuongVatPham = random.nextInt(4) + 1;
-        for (int i = 0; i < soLuongVatPham; i++) {
-            requiredItems.put(vatPhamList.get(i), 1);
+
+        // Kiểm tra nếu danh sách vật phẩm rỗng
+        if (danhSachVatPham.isEmpty()) {
+            System.out.println("Danh sách vật phẩm trống, không thể tạo yêu cầu");
+            return requiredItems;
         }
+
+        // Tạo danh sách tạm để xáo trộn
+        List<String> vatPhamList = new ArrayList<>(danhSachVatPham);
+        Collections.shuffle(vatPhamList);
+
+        int soLuongVatPham = random.nextInt(Math.min(4, vatPhamList.size())) + 1;
+
+        for (int i = 0; i < soLuongVatPham; i++) {
+            String vatPham = vatPhamList.get(i);
+            requiredItems.put(vatPham, 1);
+        }
+
         return requiredItems;
     }
 
@@ -72,7 +141,6 @@ public class QuanLyKhachHangService {
         return this.khachHangHienTai;
     }
 
-    // QUAN TRỌNG: Đổi tất cả HashMap thành Map
     public boolean xuLyBanHang(boolean quyetDinhBan, Map<String, Integer> inventory) {
         if (khachHangHienTai == null) {
             return false;
@@ -104,10 +172,15 @@ public class QuanLyKhachHangService {
             }
         }
 
+        // Tính tổng tiền bán được
+        int totalMoney = 0;
         for (Map.Entry<String, Integer> entry : requiredItems.entrySet()) {
             String itemName = entry.getKey();
             int requiredQuantity = entry.getValue();
             int currentQuantity = inventory.get(itemName);
+            int itemPrice = giaVatPham.getOrDefault(itemName, 50); // Mặc định 50 nếu không tìm thấy giá
+
+            totalMoney += itemPrice * requiredQuantity;
 
             if (currentQuantity == requiredQuantity) {
                 inventory.remove(itemName);
@@ -119,7 +192,7 @@ public class QuanLyKhachHangService {
         if (khachHangHienTai.isLaVong()) {
             playerData.mentalPoints = Math.max(0, playerData.mentalPoints - 10);
         } else {
-            playerData.money += 50;
+            playerData.money += totalMoney;
             playerData.mentalPoints = Math.min(100, playerData.mentalPoints + 5);
         }
 
@@ -175,5 +248,20 @@ public class QuanLyKhachHangService {
             }
         }
         return true;
+    }
+
+    // Thêm phương thức để lấy giá vật phẩm
+    public int getGiaVatPham(String tenVatPham) {
+        return giaVatPham.getOrDefault(tenVatPham, 50); // Mặc định 50 nếu không tìm thấy
+    }
+
+    // Thêm phương thức để lấy danh sách vật phẩm (nếu cần)
+    public List<String> getDanhSachVatPham() {
+        return new ArrayList<>(danhSachVatPham);
+    }
+
+    // Thêm phương thức để lấy map giá vật phẩm (nếu cần)
+    public Map<String, Integer> getGiaVatPhamMap() {
+        return new HashMap<>(giaVatPham);
     }
 }

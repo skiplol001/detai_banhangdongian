@@ -6,14 +6,15 @@ package view;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import model.KhachHang;
 import model.QuanLyKhachHang;
 import java.util.List;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
@@ -23,19 +24,15 @@ import javax.swing.JTextArea;
  */
 public class UiKhachHang extends javax.swing.JFrame {
 
-    private List<KhachHang> danhSachKhachHangHomNay;
-    private JPanel mainPanel, buttonPanel, infoPanel, statsPanel;
-    private JLabel titleLabel, statsLabel, infoLabel;
+    private List<KhachHang> danhSachKhachHangThat;
+    private JPanel mainPanel, buttonPanel, infoPanel;
+    private JLabel titleLabel, infoLabel;
     private JTextArea infoTextArea;
-    private JButton refreshButton;
 
     public UiKhachHang() {
         initComponents();
-        setTitle("Quản Lý Khách Hàng");
-        setSize(800, 600);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
-        setVisible(true);
+        taiDanhSachKhachHang();
+        cauHinhNutBam();
     }
 
     /* This method is called from within the constructor to initialize the form.
@@ -167,28 +164,28 @@ public class UiKhachHang extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     // End of variables declaration//GEN-END:variables
- private void taiDanhSachKhachHang() {
-        danhSachKhachHangHomNay = QuanLyKhachHang.taiDanhSachKhachHang();
+  private void taiDanhSachKhachHang() {
+        danhSachKhachHangThat = QuanLyKhachHang.getDanhSachKhachHangThat();
     }
 
-    private void capNhatGiaoDien() {
-        // Clear existing buttons
-        buttonPanel.removeAll();
+    private void cauHinhNutBam() {
+        // Xóa các button cũ
+        jPanel2.removeAll();
 
-        // Create customer buttons
-        for (int i = 0; i < danhSachKhachHangHomNay.size(); i++) {
-            KhachHang khachHang = danhSachKhachHangHomNay.get(i);
-            JButton button = new JButton(khachHang.getTen());
+        // Tạo layout linh hoạt theo số lượng khách hàng
+        int soLuongKhach = danhSachKhachHangThat.size();
+        int soCot = Math.min(soLuongKhach, 5); // Tối đa 5 cột
+        int soHang = (int) Math.ceil((double) soLuongKhach / soCot);
 
-            // Set different colors for regular customers and ghosts
-            if (khachHang.isLaVong()) {
-                button.setBackground(new Color(255, 200, 200)); // Light red for ghosts
-                button.setForeground(Color.RED);
-            } else {
-                button.setBackground(new Color(200, 255, 200)); // Light green for regular customers
-                button.setForeground(Color.BLUE);
-            }
+        jPanel2.setLayout(new GridLayout(soHang, soCot, 10, 10));
 
+        // Tạo button cho từng khách hàng
+        for (int i = 0; i < soLuongKhach; i++) {
+            KhachHang khachHang = danhSachKhachHangThat.get(i);
+            JButton button = new JButton("<html><center>" + khachHang.getTen() + "<br>(" + khachHang.getMaKH() + ")</center></html>");
+
+            button.setBackground(new Color(200, 255, 200)); // Màu xanh cho khách thật
+            button.setForeground(Color.BLUE);
             button.setFont(new Font("Arial", Font.BOLD, 12));
             button.setFocusPainted(false);
 
@@ -196,39 +193,35 @@ public class UiKhachHang extends javax.swing.JFrame {
             button.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    hienThiThongTinKhachHang(danhSachKhachHangHomNay.get(index));
+                    hienThiThongTinKhachHang(danhSachKhachHangThat.get(index));
                 }
             });
 
-            buttonPanel.add(button);
+            jPanel2.add(button);
         }
 
-        // Update statistics
-        int soKhachThuong = QuanLyKhachHang.demSoKhachThuong(danhSachKhachHangHomNay);
-        int soKhachVong = QuanLyKhachHang.demSoKhachVong(danhSachKhachHangHomNay);
-        statsLabel.setText(String.format("Tổng: %d khách | Thường: %d | Vong: %d",
-                danhSachKhachHangHomNay.size(), soKhachThuong, soKhachVong));
+        // Thêm các panel rỗng nếu cần để duy trì bố cục
+        for (int i = soLuongKhach; i < soHang * soCot; i++) {
+            jPanel2.add(new JPanel());
+        }
 
-        // Refresh the UI
-        buttonPanel.revalidate();
-        buttonPanel.repaint();
-        statsPanel.revalidate();
-        statsPanel.repaint();
+        // Cập nhật giao diện
+        jPanel2.revalidate();
+        jPanel2.repaint();
+
+        // Cập nhật tiêu đề
+        jLabel1.setText("DANH SÁCH KHÁCH HÀNG THẬT (" + soLuongKhach + " khách hàng)");
     }
 
     private void hienThiThongTinKhachHang(KhachHang khachHang) {
-        StringBuilder info = new StringBuilder();
-        info.append("Tên: ").append(khachHang.getTen()).append("\n");
-        info.append("Tuổi: ").append(khachHang.getTuoi()).append("\n");
-        info.append("Giới tính: ").append(khachHang.getGioiTinh()).append("\n");
-        info.append("Mã KH: ").append(khachHang.getMaKH()).append("\n");
-        info.append("Loại: ").append(khachHang.isLaVong() ? "KHÁCH VONG" : "KHÁCH THƯỜNG").append("\n");
+        String thongTin = "<html><b>THÔNG TIN KHÁCH HÀNG THẬT</b><br><br>"
+                + "<b>Tên:</b> " + khachHang.getTen() + "<br>"
+                + "<b>Tuổi:</b> " + khachHang.getTuoi() + "<br>"
+                + "<b>Giới tính:</b> " + khachHang.getGioiTinh() + "<br>"
+                + "<b>Mã KH:</b> " + khachHang.getMaKH() + "<br>"
+                + "<b>Loại:</b> KHÁCH HÀNG THẬT</html>";
 
-        if (khachHang.isLaVong()) {
-            info.append("\n⚠️ CẢNH BÁO: Đây là khách vong! ⚠️\n");
-            info.append("Hãy cẩn thận khi giao dịch!");
-        }
-
-        infoTextArea.setText(info.toString());
+        JOptionPane.showMessageDialog(this, thongTin, "Chi Tiết Khách Hàng", JOptionPane.INFORMATION_MESSAGE);
     }
+
 }

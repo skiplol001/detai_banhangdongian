@@ -6,6 +6,7 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class StoreTheme {
+
     // Màu sắc theme
     private static final Color MAIN_BG = new Color(240, 240, 245);
     private static final Color PANEL_BG = Color.WHITE;
@@ -15,9 +16,12 @@ public class StoreTheme {
     private static final Color HOVER_BTN_COLOR = new Color(0, 140, 235);
     private static final Color SPECIAL_BTN_COLOR = new Color(215, 60, 60);
     private static final Color SPECIAL_HOVER_COLOR = new Color(235, 80, 80);
+    private static final Color BARGAIN_BTN_COLOR = new Color(60, 180, 75);
+    private static final Color BARGAIN_HOVER_COLOR = new Color(80, 200, 95);
 
     public static void applyTheme(JFrame frame, JLabel titleLabel, JPanel contentPanel,
-                                JLabel[] itemLabels, JButton[] normalButtons, JButton specialButton) {
+            JLabel[] itemLabels, JButton[] normalButtons,
+            JButton specialButton, JButton bargainButton) {
         // Thiết lập frame
         frame.getContentPane().setBackground(MAIN_BG);
 
@@ -37,6 +41,9 @@ public class StoreTheme {
 
         // Thiết lập nút đặc biệt (nút bán)
         setupSpecialButton(specialButton);
+
+        // Thiết lập nút mặc cả
+        setupBargainButton(bargainButton);
     }
 
     private static void setupTitleLabel(JLabel label) {
@@ -73,10 +80,10 @@ public class StoreTheme {
 
         // Hiệu ứng hover với MouseAdapter riêng
         btn.addMouseListener(new ButtonHoverListener(
-            NORMAL_BTN_COLOR,
-            HOVER_BTN_COLOR,
-            Color.WHITE,
-            Color.WHITE
+                NORMAL_BTN_COLOR,
+                HOVER_BTN_COLOR,
+                Color.WHITE,
+                Color.WHITE
         ));
     }
 
@@ -92,15 +99,35 @@ public class StoreTheme {
 
         // Hiệu ứng hover cho nút đặc biệt
         btn.addMouseListener(new ButtonHoverListener(
-            SPECIAL_BTN_COLOR,
-            SPECIAL_HOVER_COLOR,
-            Color.WHITE,
-            Color.WHITE
+                SPECIAL_BTN_COLOR,
+                SPECIAL_HOVER_COLOR,
+                Color.WHITE,
+                Color.WHITE
+        ));
+    }
+
+    private static void setupBargainButton(JButton btn) {
+        btn.setBackground(BARGAIN_BTN_COLOR);
+        btn.setForeground(Color.WHITE);
+        btn.setFocusPainted(false);
+        btn.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        btn.setBorder(new CompoundBorder(
+                new LineBorder(new Color(50, 160, 65), 1),
+                new EmptyBorder(8, 15, 8, 15)
+        ));
+
+        // Hiệu ứng hover cho nút mặc cả
+        btn.addMouseListener(new ButtonHoverListener(
+                BARGAIN_BTN_COLOR,
+                BARGAIN_HOVER_COLOR,
+                Color.WHITE,
+                Color.WHITE
         ));
     }
 
     // Lớp riêng xử lý hover để tránh bug
     private static class ButtonHoverListener extends MouseAdapter {
+
         private final Color normalBg;
         private final Color hoverBg;
         private final Color normalFg;
