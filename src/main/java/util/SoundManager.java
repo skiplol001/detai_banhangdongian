@@ -16,7 +16,7 @@ public class SoundManager {
     private static boolean bgmEnabled = true;
     private static Clip successClip;
     private static Clip bgmClip;
-    private static float volume = 0.8f;
+    private static float volume = 0.7f;
 
     // Biến để theo dõi trạng thái
     private static boolean soundsLoaded = false;

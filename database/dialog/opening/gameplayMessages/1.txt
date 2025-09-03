@@ -1,0 +1,12 @@
+"Chào mừng đến với Cửa Hàng Hoang!",
+"Đây là nơi bạn sẽ quản lý một cửa hàng kỳ lạ...",
+"Cậu có thấy?... chiếc lư hương góc trái màn hình không?",
+"Chiếc lư hương này sẽ bói mệnh giúp cậu xem được thông tin người trước mặt",
+"Quyển số tay góc phải màn hình...",
+"Quyển số tay ghi chép thông tin của người",
+"Cậu có thấy vị khách trước mặt không?Ấn vào cậu có thể xem yêu cầu của họ",
+"Nút 'bán': Bán vật phẩm cho khách hàng nếu bạn có đủ",
+"Nút 'không': Từ chối giao dịch với khách hàng",
+"Nút 'Cửa Hàng': Mở cửa hàng để mua vật phẩm mới",
+"Quản lý điểm tinh thần và tiền bạc khôn ngoan!",
+"Hãy cẩn thận, không phải tất cả khách hàng đều bình thường..."

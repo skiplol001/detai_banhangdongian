@@ -17,7 +17,7 @@ public class Opening {
     private int currentMessageIndex = 0;
 
     // Danh sách các thông báo sẽ hiển thị
-    private final String[] gameplayMessages = {
+        private final String[] gameplayMessages = {
         "Chào mừng đến với Cửa Hàng Hoang!",
         "Đây là nơi bạn sẽ quản lý một cửa hàng kỳ lạ...",
         "Cậu có thấy?... chiếc lư hương góc trái màn hình không?",

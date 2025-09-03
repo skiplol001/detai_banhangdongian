@@ -5,13 +5,10 @@
 package view;
 
 import java.awt.BorderLayout;
-import view.MaQuaiTheme;
 import model.KhachHang;
 import model.QuanLyKhachHangService;
 import util.TaiAnhGamePlay;
 import util.TextFileStorage;
-import view.UiKhachHang;
-import view.UiPhuBanHang;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -25,9 +22,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.OverlayLayout;
-import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
-import javax.swing.Timer;
 import model.GameTimeManager;
 import util.SoundManager;
 
@@ -42,8 +37,8 @@ public class UIChinh extends javax.swing.JFrame {
     private long gameStartTime;
     private final float TIME_SCALE = 0.1f;
     private QuanLyKhachHangService khachHangService;
-    private KhachHang khachHangTamThoi;
     private KhachHang khachHangMoiTamThoi;
+    private KichBanNgayDauTien kichBanNgayDau;
 
     public UIChinh() {
         initComponents();
@@ -64,6 +59,8 @@ public class UIChinh extends javax.swing.JFrame {
         loadRandomImageToButton();
 
         Opening opening = new Opening(this);
+        kichBanNgayDau = new KichBanNgayDauTien(this);
+        int savedDayCount = KichBanNgayDauTien.getCurrentDayCount();
         opening.startOpeningSequence();
     }
 
@@ -653,6 +650,13 @@ public class UIChinh extends javax.swing.JFrame {
         // Hiển thị bảng tổng kết ngày
         showDaySummary();
 
+        // 🔥 SỬA QUAN TRỌNG: KIỂM TRA VÀ CHẠY KỊCH BẢN TRƯỚC KHI CẬP NHẬT SỐ NGÀY
+        kichBanNgayDau.startKichBan();
+
+        // 🔥 Sau khi chạy kịch bản (nếu có), mới cập nhật số ngày tiếp theo
+        int currentDay = gameTimeManager.getCurrentDay();
+        KichBanNgayDauTien.updateDayCount(currentDay + 1); // Cập nhật cho ngày tiếp theo
+
         // Chuẩn bị cho ngày mới
         prepareForNewDay();
     }
@@ -673,5 +677,17 @@ public class UIChinh extends javax.swing.JFrame {
 
     private int calculateDailyRevenue() {
         return 0;
+    }
+
+    public void tamDungTimer() {
+        if (gameTimeManager != null && gameTimeManager.isTimerRunning()) {
+            gameTimeManager.stopTimer();
+        }
+    }
+
+    public void tiepTucTimer() {
+        if (gameTimeManager != null && !gameTimeManager.isTimerRunning()) {
+            gameTimeManager.startTimer();
+        }
     }
 }
