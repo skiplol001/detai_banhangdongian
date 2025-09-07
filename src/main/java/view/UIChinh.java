@@ -4,6 +4,8 @@
  */
 package view;
 
+import controller.KichBanNgayDauTien;
+import controller.Opening;
 import java.awt.BorderLayout;
 import model.KhachHang;
 import model.QuanLyKhachHangService;

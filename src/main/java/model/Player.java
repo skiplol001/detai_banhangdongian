@@ -5,6 +5,7 @@ import java.util.Map;
 import util.TextFileStorage;
 
 public class Player {
+
     private int money;
     private int mentalPoints;
     private Map<String, Integer> inventory;
@@ -38,6 +39,18 @@ public class Player {
 
     public void addItem(String itemName, int quantity) {
         inventory.put(itemName, inventory.getOrDefault(itemName, 0) + quantity);
+    }
+
+    public void addItemToInventory(String itemName, int quantity) {
+        inventory.put(itemName, inventory.getOrDefault(itemName, 0) + quantity);
+    }
+
+    public void removeItemFromInventory(String itemName) {
+        inventory.remove(itemName);
+    }
+
+    public boolean hasItem(String itemName) {
+        return inventory.containsKey(itemName);
     }
 
     public void removeItem(String itemName, int quantity) {

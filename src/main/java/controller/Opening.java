@@ -1,10 +1,11 @@
-package view;
+package controller;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import util.GameStateManager;
+import view.UIChinh;
 
 /**
  * Lớp Opening hiển thị các thông báo giới thiệu gameplay và một chuỗi hội thoại

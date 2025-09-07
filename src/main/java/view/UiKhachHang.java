@@ -5,18 +5,16 @@
 package view;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import model.KhachHang;
 import model.QuanLyKhachHang;
 import java.util.List;
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextArea;
 
 /**
  *
@@ -25,14 +23,12 @@ import javax.swing.JTextArea;
 public class UiKhachHang extends javax.swing.JFrame {
 
     private List<KhachHang> danhSachKhachHangThat;
-    private JPanel mainPanel, buttonPanel, infoPanel;
-    private JLabel titleLabel, infoLabel;
-    private JTextArea infoTextArea;
 
     public UiKhachHang() {
         initComponents();
+        jPanel1.setOpaque(false);
         taiDanhSachKhachHang();
-        cauHinhNutBam();
+        cauHinhLabel();
     }
 
     /* This method is called from within the constructor to initialize the form.
@@ -44,184 +40,125 @@ public class UiKhachHang extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jPanel2 = new javax.swing.JPanel();
-        btnKhach1 = new javax.swing.JButton();
-        btnKhach2 = new javax.swing.JButton();
-        btnKhach3 = new javax.swing.JButton();
-        btnKhach4 = new javax.swing.JButton();
-        btnKhach5 = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
+        lblKhachHang1 = new javax.swing.JLabel();
+        lblAnh = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Khách hàng trong ngày");
-
-        btnKhach1.setText("Khách hàng số 1");
-
-        btnKhach2.setText("Khách hàng số 2");
-
-        btnKhach3.setText("Khách hàng số 3");
-        btnKhach3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnKhach3ActionPerformed(evt);
-            }
-        });
-
-        btnKhach4.setText("Khách hàng số 4");
-
-        btnKhach5.setText("Khách hàng số 5");
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnKhach1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnKhach2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnKhach3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnKhach4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnKhach5)
-                .addContainerGap())
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnKhach2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnKhach3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnKhach4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnKhach5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnKhach1, javax.swing.GroupLayout.DEFAULT_SIZE, 309, Short.MAX_VALUE))
-                .addContainerGap())
-        );
-
-        jLabel1.setText("DAH SÁCH KHÁCH HÀNG HÔM NAY");
-        jLabel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        setResizable(false);
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addGap(231, 231, 231))
+            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                    .addContainerGap(47, Short.MAX_VALUE)
+                    .addComponent(lblKhachHang1, javax.swing.GroupLayout.PREFERRED_SIZE, 334, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(19, Short.MAX_VALUE)))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(15, 15, 15)
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                    .addContainerGap(200, Short.MAX_VALUE)
+                    .addComponent(lblKhachHang1)
+                    .addContainerGap(200, Short.MAX_VALUE)))
         );
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(56, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
-        );
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 140, 400, 400));
+
+        lblAnh.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources-ui/UI_TTKH.png"))); // NOI18N
+        getContentPane().add(lblAnh, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, 610));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void btnKhach3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnKhach3ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnKhach3ActionPerformed
 
     /**
      * @param args the command line arguments
      */
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnKhach1;
-    private javax.swing.JButton btnKhach2;
-    private javax.swing.JButton btnKhach3;
-    private javax.swing.JButton btnKhach4;
-    private javax.swing.JButton btnKhach5;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
+    private javax.swing.JLabel lblAnh;
+    private javax.swing.JLabel lblKhachHang1;
     // End of variables declaration//GEN-END:variables
-  private void taiDanhSachKhachHang() {
+
+    private void taiDanhSachKhachHang() {
         danhSachKhachHangThat = QuanLyKhachHang.getDanhSachKhachHangThat();
     }
 
-    private void cauHinhNutBam() {
-        // Xóa các button cũ
-        jPanel2.removeAll();
+    public void reloadKhachHang() {
+        taiDanhSachKhachHang();
+        cauHinhLabel();
+    }
 
-        // Tạo layout linh hoạt theo số lượng khách hàng
-        int soLuongKhach = danhSachKhachHangThat.size();
-        int soCot = Math.min(soLuongKhach, 5); // Tối đa 5 cột
-        int soHang = (int) Math.ceil((double) soLuongKhach / soCot);
+    private void cauHinhLabel() {
+        jPanel1.removeAll();
 
-        jPanel2.setLayout(new GridLayout(soHang, soCot, 10, 10));
+        if (danhSachKhachHangThat.isEmpty()) {
+            JLabel emptyLabel = new JLabel("Không có khách hàng nào");
+            emptyLabel.setOpaque(false);
+            emptyLabel.setForeground(Color.GRAY);
+            emptyLabel.setHorizontalAlignment(JLabel.CENTER);
+            jPanel1.add(emptyLabel);
+        } else {
+            jPanel1.setLayout(new GridLayout(danhSachKhachHangThat.size(), 1, 0, 5));
 
-        // Tạo button cho từng khách hàng
-        for (int i = 0; i < soLuongKhach; i++) {
-            KhachHang khachHang = danhSachKhachHangThat.get(i);
-            JButton button = new JButton("<html><center>" + khachHang.getTen() + "<br>(" + khachHang.getMaKH() + ")</center></html>");
-
-            button.setBackground(new Color(200, 255, 200)); // Màu xanh cho khách thật
-            button.setForeground(Color.BLUE);
-            button.setFont(new Font("Arial", Font.BOLD, 12));
-            button.setFocusPainted(false);
-
-            final int index = i;
-            button.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    hienThiThongTinKhachHang(danhSachKhachHangThat.get(index));
-                }
-            });
-
-            jPanel2.add(button);
+            for (int i = 0; i < danhSachKhachHangThat.size(); i++) {
+                KhachHang khachHang = danhSachKhachHangThat.get(i);
+                JLabel label = createKhachHangLabel(khachHang, i);
+                jPanel1.add(label);
+            }
         }
 
-        // Thêm các panel rỗng nếu cần để duy trì bố cục
-        for (int i = soLuongKhach; i < soHang * soCot; i++) {
-            jPanel2.add(new JPanel());
-        }
+        jPanel1.revalidate();
+        jPanel1.repaint();
+    }
 
-        // Cập nhật giao diện
-        jPanel2.revalidate();
-        jPanel2.repaint();
+    private JLabel createKhachHangLabel(KhachHang khachHang, int index) {
+        JLabel label = new JLabel("<html><center>" + khachHang.getTen() + " Mã: " + khachHang.getMaKH() + "</center></html>");
 
-        // Cập nhật tiêu đề
-        jLabel1.setText("DANH SÁCH KHÁCH HÀNG THẬT (" + soLuongKhach + " khách hàng)");
+        label.setOpaque(false);
+        label.setForeground(new Color(30, 50, 30));
+        label.setFont(new Font("Arial", Font.BOLD, 12));
+        label.setHorizontalAlignment(JLabel.CENTER);
+        label.setVerticalAlignment(JLabel.CENTER);
+        label.setBorder(null);
+        label.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+        label.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                hienThiThongTinKhachHang(danhSachKhachHangThat.get(index));
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                label.setForeground(new Color(0, 100, 200));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                label.setForeground(new Color(30, 30, 30));
+            }
+        });
+
+        return label;
     }
 
     private void hienThiThongTinKhachHang(KhachHang khachHang) {
-        String thongTin = "<html><b>THÔNG TIN KHÁCH HÀNG THẬT</b><br><br>"
+        String thongTin = "<html><div style='text-align: center;'>"
+                + "<b style='color: #4682B4; font-size: 16px;'>THÔNG TIN KHÁCH HÀNG THẬT</b><br><br>"
                 + "<b>Tên:</b> " + khachHang.getTen() + "<br>"
                 + "<b>Tuổi:</b> " + khachHang.getTuoi() + "<br>"
                 + "<b>Giới tính:</b> " + khachHang.getGioiTinh() + "<br>"
                 + "<b>Mã KH:</b> " + khachHang.getMaKH() + "<br>"
-                + "<b>Loại:</b> KHÁCH HÀNG THẬT</html>";
+                + "<b>Loại:</b> KHÁCH HÀNG THẬT</div></html>";
 
         JOptionPane.showMessageDialog(this, thongTin, "Chi Tiết Khách Hàng", JOptionPane.INFORMATION_MESSAGE);
     }
-
 }

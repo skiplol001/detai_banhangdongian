@@ -144,7 +144,9 @@
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="btnBan" min="-2" pref="186" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="btnMacca" max="32767" attributes="0"/>
+                              <Component id="btnMacca" min="-2" pref="163" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="btnHangHoa" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                       <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
@@ -193,6 +195,7 @@
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
                           <Component id="btnBan" pref="38" max="32767" attributes="0"/>
                           <Component id="btnMacca" max="32767" attributes="0"/>
+                          <Component id="btnHangHoa" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                   </Group>
@@ -311,6 +314,14 @@
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Arial" size="12" style="2"/>
                 </Property>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JButton" name="btnHangHoa">
+              <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Arial" size="12" style="1"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="H&#xe0;ng H&#xf3;a"/>
               </Properties>
             </Component>
           </SubComponents>

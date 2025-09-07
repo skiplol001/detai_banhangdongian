@@ -1,4 +1,4 @@
-package view;
+package controller;
 
 import javax.swing.JOptionPane;
 import javax.swing.Timer;

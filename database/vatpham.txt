@@ -1,5 +1,6 @@
-Bánh mì:50
-Nước suối:30
-Thuốc:100
-Snack:20
-Snack siêu cấp vip pro:25
+Bánh mì:50:0
+Nước suối:30:0
+Thuốc:100:500
+Snack:20:300
+Cà phê:80:400
+Bánh ngọt:60:350

@@ -4,6 +4,7 @@
  */
 package view;
 
+import controller.StoreController;
 import model.Player;
 
 import java.awt.event.ActionEvent;
@@ -22,6 +23,7 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.util.Arrays;
+import javax.swing.JOptionPane;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
@@ -61,69 +63,95 @@ public class UiPhuBanHang extends javax.swing.JFrame {
         });
     }
 
-    private void customizeUI() {
-    // Cập nhật để hiển thị động các vật phẩm (tối đa 6)
-    JLabel[] itemLabels = {jLabel1, jLabel2, jLabel3, jLabel4, jLabel5, jLabel6};
-    JButton[] normalButtons = {btnBanhmi, btnNuoc, btnthuoc, btnSnack, btnItem5, btnItem6};
+    void customizeUI() {
+        JLabel[] itemLabels = {jLabel1, jLabel2, jLabel3, jLabel4, jLabel5, jLabel6};
+        JButton[] normalButtons = {btnBanhmi, btnNuoc, btnthuoc, btnSnack, btnItem5, btnItem6};
 
-    // Ẩn tất cả các component trước
-    for (JLabel label : itemLabels) {
-        label.setVisible(false);
-        label.setText(""); // Xóa text cũ
-    }
-    for (JButton button : normalButtons) {
-        button.setVisible(false);
-        button.setText(""); // Xóa text cũ
-        // Xóa tất cả ActionListener cũ
-        for (ActionListener al : button.getActionListeners()) {
-            button.removeActionListener(al);
+        // Ẩn tất cả các component trước
+        for (JLabel label : itemLabels) {
+            label.setVisible(false);
+            label.setText("");
         }
+        for (JButton button : normalButtons) {
+            button.setVisible(false);
+            button.setText("");
+            for (ActionListener al : button.getActionListeners()) {
+                button.removeActionListener(al);
+            }
+        }
+
+        // Hiển thị các vật phẩm theo dữ liệu từ file - TỐI ĐA 6 VẬT PHẨM
+        int itemCount = Math.min(controller.getDsVatPham().size(), itemLabels.length);
+
+        for (int i = 0; i < itemCount; i++) {
+            String vatPham = controller.getDsVatPham().get(i);
+            int gia = controller.getGiaVatPham().get(vatPham);
+            int soLuong = controller.getSoLuongHangHoa().get(vatPham); // Lấy số lượng từ kho
+
+            // Cập nhật label - hiển thị cả số lượng
+            itemLabels[i].setText(vatPham + " - Giá: " + gia + "$ - Tồn kho: " + soLuong);
+            itemLabels[i].setVisible(true);
+
+            // Đổi màu nếu số lượng ít
+            if (soLuong < 5) {
+                itemLabels[i].setForeground(Color.RED);
+            } else {
+                itemLabels[i].setForeground(Color.BLACK);
+            }
+
+            // Cập nhật nút - disable nếu hết hàng
+            normalButtons[i].setText("Mua - " + vatPham + " x1");
+            normalButtons[i].setVisible(true);
+            normalButtons[i].setEnabled(soLuong > 0);
+
+            if (soLuong == 0) {
+                normalButtons[i].setToolTipText("Hết hàng");
+                normalButtons[i].setBackground(Color.LIGHT_GRAY);
+            }
+
+            // Gán action listener động
+            final String item = vatPham;
+            final int price = gia;
+            normalButtons[i].addActionListener(e -> {
+                if (controller.getSoLuongHangHoa().get(item) > 0) {
+                    controller.handleBuy(item, price);
+                    customizeUI(); // Refresh UI sau khi mua
+                } else {
+                    JOptionPane.showMessageDialog(this, "Mặt hàng này đã hết!");
+                }
+            });
+        }
+
+        // Áp dụng theme
+        JLabel[] visibleLabels = Arrays.stream(itemLabels)
+                .filter(JLabel::isVisible)
+                .toArray(JLabel[]::new);
+
+        JButton[] visibleButtons = Arrays.stream(normalButtons)
+                .filter(JButton::isVisible)
+                .toArray(JButton[]::new);
+
+        StoreTheme.applyTheme(
+                this,
+                label1,
+                jPanel2,
+                visibleLabels,
+                visibleButtons,
+                btnBan,
+                btnMacca,
+                btnHangHoa
+        );
     }
-
-    // Hiển thị các vật phẩm theo dữ liệu từ file - TỐI ĐA 6 VẬT PHẨM
-    int itemCount = Math.min(controller.getDsVatPham().size(), itemLabels.length);
-    
-    for (int i = 0; i < itemCount; i++) {
-        String vatPham = controller.getDsVatPham().get(i);
-        int gia = controller.getGiaVatPham().get(vatPham);
-
-        // Cập nhật label
-        itemLabels[i].setText(vatPham + " - Giá: " + gia + "$");
-        itemLabels[i].setVisible(true);
-
-        // Cập nhật nút
-        normalButtons[i].setText("Mua - " + vatPham + " x1");
-        normalButtons[i].setVisible(true);
-
-        // Gán action listener động
-        final String item = vatPham;
-        final int price = gia;
-        normalButtons[i].addActionListener(e -> controller.handleBuy(item, price));
-    }
-
-    // Áp dụng theme chỉ cho các component đang hiển thị
-    JLabel[] visibleLabels = Arrays.stream(itemLabels)
-            .filter(JLabel::isVisible)
-            .toArray(JLabel[]::new);
-    
-    JButton[] visibleButtons = Arrays.stream(normalButtons)
-            .filter(JButton::isVisible)
-            .toArray(JButton[]::new);
-
-    StoreTheme.applyTheme(
-            this,
-            label1,
-            jPanel2,
-            visibleLabels,
-            visibleButtons,
-            btnBan,
-            btnMacca
-    );
-}
 
     private void setupEventHandlers() {
         btnBan.addActionListener(this::openSellDialog);
         btnMacca.addActionListener(this::openBargainDialog);
+        btnHangHoa.addActionListener(this::openInventoryDialog);
+    }
+
+    private void openInventoryDialog(ActionEvent e) {
+        InventoryDialog inventoryDialog = new InventoryDialog(this, controller);
+        inventoryDialog.setVisible(true);
     }
 
     private void openSellDialog(ActionEvent e) {
@@ -322,6 +350,7 @@ public class UiPhuBanHang extends javax.swing.JFrame {
         btnItem5 = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
         btnItem6 = new javax.swing.JButton();
+        btnHangHoa = new javax.swing.JButton();
         menuBar = new javax.swing.JMenuBar();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -378,6 +407,9 @@ public class UiPhuBanHang extends javax.swing.JFrame {
 
         btnItem6.setFont(new java.awt.Font("Arial", 2, 12)); // NOI18N
 
+        btnHangHoa.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        btnHangHoa.setText("Hàng Hóa");
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -408,7 +440,9 @@ public class UiPhuBanHang extends javax.swing.JFrame {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(btnBan, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnMacca, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(btnMacca, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnHangHoa, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addGap(15, 15, 15))
         );
         jPanel2Layout.setVerticalGroup(
@@ -444,7 +478,8 @@ public class UiPhuBanHang extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(btnBan, javax.swing.GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE)
-                    .addComponent(btnMacca, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnMacca, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnHangHoa, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(10, 10, 10))
         );
 
@@ -500,6 +535,7 @@ public class UiPhuBanHang extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBan;
     private javax.swing.JButton btnBanhmi;
+    private javax.swing.JButton btnHangHoa;
     private javax.swing.JButton btnItem5;
     private javax.swing.JButton btnItem6;
     private javax.swing.JButton btnMacca;
