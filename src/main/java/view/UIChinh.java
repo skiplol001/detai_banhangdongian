@@ -4,6 +4,7 @@
  */
 package view;
 
+import controller.KichBanNgay4;
 import controller.KichBanNgayDauTien;
 import controller.Opening;
 import java.awt.BorderLayout;
@@ -26,6 +27,7 @@ import javax.swing.JPanel;
 import javax.swing.OverlayLayout;
 import javax.swing.SwingUtilities;
 import model.GameTimeManager;
+import util.ButtonManager;
 import util.SoundManager;
 
 /**
@@ -41,6 +43,7 @@ public class UIChinh extends javax.swing.JFrame {
     private QuanLyKhachHangService khachHangService;
     private KhachHang khachHangMoiTamThoi;
     private KichBanNgayDauTien kichBanNgayDau;
+    private KichBanNgay4 kichBanNgay4;
 
     public UIChinh() {
         initComponents();
@@ -62,6 +65,7 @@ public class UIChinh extends javax.swing.JFrame {
 
         Opening opening = new Opening(this);
         kichBanNgayDau = new KichBanNgayDauTien(this);
+        kichBanNgay4 = new KichBanNgay4(this, gameTimeManager);
         int savedDayCount = KichBanNgayDauTien.getCurrentDayCount();
         opening.startOpeningSequence();
     }
@@ -354,7 +358,7 @@ public class UIChinh extends javax.swing.JFrame {
             if (result) {
                 updateUI();
                 // QUAN TRỌNG: Reset kích thước trước khi load ảnh mới
-                fixButtonSize(btnAnh, 252, 301);
+                ButtonManager.fixButtonSize(btnAnh, 252, 301);
 
                 loadRandomImageToButton();
                 khachHangMoiTamThoi = null;
@@ -382,7 +386,7 @@ public class UIChinh extends javax.swing.JFrame {
                 loadPlayerData();
                 updateUI();
                 // QUAN TRỌNG: Reset kích thước trước khi load ảnh mới
-                fixButtonSize(btnAnh, 252, 301);
+                ButtonManager.fixButtonSize(btnAnh, 252, 301);
                 loadRandomImageToButton();
                 khachHangMoiTamThoi = null;
 
@@ -486,7 +490,7 @@ public class UIChinh extends javax.swing.JFrame {
         }
     }
 
-    private void updateUI() {
+    public void updateUI() {
         jLabel6.setText(String.valueOf(playerData.money));
         jLabel8.setText(String.valueOf(playerData.mentalPoints));
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -522,7 +526,7 @@ public class UIChinh extends javax.swing.JFrame {
         JLabel[] labels = {jLabel1, jLabel2, jLabel3, jLabel4, jLabel5, jLabel6, jLabel7, jLabel8};
         JButton[] specialButtons = {btnKHTrongNgay, jButton1}; // Các nút màu đỏ máu
         JButton[] normalButtons = {btnTTKH, btnBan, btnKhong}; // Các nút màu xanh rêu
-        fixButtonSize(btnAnh, 252, 301);
+        ButtonManager.fixButtonSize(btnAnh, 252, 301);
         // Sử dụng phiên bản simple theme để không thay đổi layout
         MaQuaiTheme.applySimpleTheme(this, panels, labels, specialButtons, normalButtons);
 
@@ -545,14 +549,6 @@ public class UIChinh extends javax.swing.JFrame {
         btnAnh.setBorder(BorderFactory.createEmptyBorder());
         btnAnh.setContentAreaFilled(false);
         btnAnh.setFocusPainted(false);
-
-    }
-
-    private void fixButtonSize(JButton button, int width, int height) {
-        button.setPreferredSize(new Dimension(width, height));
-        button.setMinimumSize(new Dimension(width, height));
-        button.setMaximumSize(new Dimension(width, height));
-        button.setSize(new Dimension(width, height));
     }
 
     private void setupPanelBackground(JPanel panel) {
@@ -601,7 +597,7 @@ public class UIChinh extends javax.swing.JFrame {
             }
 
             if (randomIcon != null) {
-                fixButtonSize(btnAnh, 252, 301);
+                ButtonManager.fixButtonSize(btnAnh, 252, 301);
                 btnAnh.setIcon(randomIcon);
 
                 btnAnh.revalidate();
@@ -628,6 +624,20 @@ public class UIChinh extends javax.swing.JFrame {
                 });
             }
         });
+
+        // 🔥 THÊM LISTENER CHO GIỜ ĐẶC BIỆT (12h đêm)
+        gameTimeManager.setSpecialHourListener(new GameTimeManager.SpecialHourListener() {
+            @Override
+            public void onSpecialHour(int hour) {
+                if (hour == 0) { // 12h đêm
+                    SwingUtilities.invokeLater(() -> {
+                        // Kiểm tra và chạy kịch bản ngày 4 lúc 12h đêm
+                        kichBanNgay4.kiemTraVaKichHoat();
+                    });
+                }
+            }
+        });
+
         gameTimeManager.setDayEndListener(new GameTimeManager.DayEndListener() {
             @Override
             public void onDayEnd() {
@@ -641,7 +651,7 @@ public class UIChinh extends javax.swing.JFrame {
         gameTimeManager.startTimer();
     }
 
-    private void endDaySequence() {
+    public void endDaySequence() {
         // Hiển thị thông báo kết thúc ngày
         JOptionPane.showMessageDialog(this,
                 "Đã hết ngày! Cửa hàng đóng cửa.",
@@ -652,8 +662,9 @@ public class UIChinh extends javax.swing.JFrame {
         // Hiển thị bảng tổng kết ngày
         showDaySummary();
 
-        // 🔥 SỬA QUAN TRỌNG: KIỂM TRA VÀ CHẠY KỊCH BẢN TRƯỚC KHI CẬP NHẬT SỐ NGÀY
+        // 🔥 SỬA QUAN TRỌNG: KIỂM TRA VÀ CHẠY KỊCH BẢN TRƯỚC KHI CẬP NHẬT SỬA NGÀY
         kichBanNgayDau.startKichBan();
+        kichBanNgay4.kiemTraVaKichHoat();
 
         // 🔥 Sau khi chạy kịch bản (nếu có), mới cập nhật số ngày tiếp theo
         int currentDay = gameTimeManager.getCurrentDay();
@@ -691,5 +702,25 @@ public class UIChinh extends javax.swing.JFrame {
         if (gameTimeManager != null && !gameTimeManager.isTimerRunning()) {
             gameTimeManager.startTimer();
         }
+    }
+
+    public JButton getBtnAnh() {
+        return btnAnh;
+    }
+
+    public JLabel getJLabel2() {
+        return jLabel2;
+    }
+
+    public JLabel getJLabel8() {
+        return jLabel8;
+    }
+
+    public GameTimeManager getGameTimeManager() {
+        return gameTimeManager;
+    }
+
+    public void setGameTimeManager(GameTimeManager gameTimeManager) {
+        this.gameTimeManager = gameTimeManager;
     }
 }

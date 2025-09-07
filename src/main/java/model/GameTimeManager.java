@@ -41,7 +41,7 @@ public class GameTimeManager {
 
     public int getCurrentDay() {
         return currentDay;
-    }   
+    }
 
     private void initGameTimer() {
         gameStartTime = System.currentTimeMillis();
@@ -51,6 +51,17 @@ public class GameTimeManager {
                 updateGameTime();
             }
         });
+    }
+
+    public interface SpecialHourListener {
+
+        void onSpecialHour(int hour);
+    }
+
+    private SpecialHourListener specialHourListener;
+
+    public void setSpecialHourListener(SpecialHourListener listener) {
+        this.specialHourListener = listener;
     }
 
     private void updateGameTime() {
@@ -66,15 +77,17 @@ public class GameTimeManager {
         String timeString = String.format("%02d:%02d", hours, minutes);
         boolean isNight = hours >= 19 || hours < 7;
 
+        // 🔥 KIỂM TRA GIỜ ĐẶC BIỆT: 12h đêm (0 giờ)
+        if (hours == 0 && minutes == 0 && specialHourListener != null) {
+            specialHourListener.onSpecialHour(0); // 0 = 12h đêm
+        }
+
         // Kiểm tra nếu đã đến 3h sáng (kết thúc ngày)
         if (hours == endHour && minutes == 0) {
             if (dayEndListener != null) {
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        dayEndListener.onDayEnd();
-                        currentDay++;
-                    }
+                SwingUtilities.invokeLater(() -> {
+                    dayEndListener.onDayEnd();
+                    currentDay++;
                 });
             }
             stopTimer();
@@ -130,4 +143,5 @@ public class GameTimeManager {
         long almostFullDay = gameDayLength - (1 * 60 * 10); // 1 phút trước khi kết thúc
         gameStartTime = System.currentTimeMillis() - (long) (almostFullDay / TIME_SCALE);
     }
+
 }

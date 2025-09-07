@@ -1,5 +1,10 @@
-Liễu Như Yên,25,Nữ,KH001,false
-Tạ Minh Kha,145,Nam,V7678,true
-Tiểu Lạc,157,Nữ,V6806,true
-Shyn Mụi Mụi,131,Nữ,V5936,true
-Tăng Quốc Cường,171,Nam,V7012,true
+Liễu Như Yên,132,Nữ,V2999,true
+Tạ Minh Kha,30,Nam,KH002,false
+Tiểu Lạc,18,Nữ,KH003,false
+Shyn Mụi Mụi,134,Nữ,V9526,true
+Tăng Quốc Cường,28,Nam,KH005,false
+Hà Nhân,20,Nam,KH06,false
+Thầy Bạch,57,Nam,KH06,false
+Bạch Y Cô Nương,22,Nữ,KH08,false
+Nguyệt Lam Tiểu Thư,21,Nữ,KH09,false
+Huyền Thanh Tố Uyển,19,Nữ,KH10,false
