@@ -16,6 +16,10 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.WindowEvent;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -95,7 +99,7 @@ public class UIChinh extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        lblTen = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
@@ -121,8 +125,8 @@ public class UIChinh extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel1.setText("Tên:");
 
-        jLabel2.setFont(new java.awt.Font("Arial", 2, 12)); // NOI18N
-        jLabel2.setText("Player");
+        lblTen.setFont(new java.awt.Font("Arial", 2, 12)); // NOI18N
+        lblTen.setText("Player");
 
         jLabel3.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel3.setText("Thời gian:");
@@ -144,16 +148,16 @@ public class UIChinh extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel2)
+                .addComponent(lblTen)
                 .addGap(246, 246, 246)
                 .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 69, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 44, Short.MAX_VALUE)
-                .addGap(206, 206, 206)
+                .addGap(122, 122, 122)
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel6)
-                .addGap(23, 23, 23))
+                .addGap(115, 115, 115))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -161,7 +165,7 @@ public class UIChinh extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(jLabel2)
+                    .addComponent(lblTen)
                     .addComponent(jLabel3)
                     .addComponent(jLabel5)
                     .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -488,9 +492,26 @@ public class UIChinh extends javax.swing.JFrame {
             playerData.mentalPoints = 100;
             playerData.inventory = new HashMap<>();
         }
+
+        // THÊM: Đọc tên từ file nếu có
+        try {
+            String projectPath = System.getProperty("user.dir");
+            String filePath = Paths.get(projectPath, "database", "player", "player_name.txt").toString();
+            File file = new File(filePath);
+
+            if (file.exists()) {
+                String savedName = new String(Files.readAllBytes(Paths.get(filePath))).trim();
+                if (!savedName.isEmpty()) {
+                    lblTen.setText(savedName);
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("Lỗi khi đọc tên người chơi: " + e.getMessage());
+        }
     }
 
-    public void updateUI() {
+
+public void updateUI() {
         jLabel6.setText(String.valueOf(playerData.money));
         jLabel8.setText(String.valueOf(playerData.mentalPoints));
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -507,7 +528,6 @@ public class UIChinh extends javax.swing.JFrame {
     private javax.swing.JButton btnTTKH;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -518,12 +538,13 @@ public class UIChinh extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel5;
+    private javax.swing.JLabel lblTen;
     private javax.swing.JMenuBar menuBar;
     // End of variables declaration//GEN-END:variables
 
     private void customizeUI() {
         JPanel[] panels = {jPanel1, jPanel2, jPanel3, jPanel5};
-        JLabel[] labels = {jLabel1, jLabel2, jLabel3, jLabel4, jLabel5, jLabel6, jLabel7, jLabel8};
+        JLabel[] labels = {jLabel1, lblTen, jLabel3, jLabel4, jLabel5, jLabel6, jLabel7, jLabel8};
         JButton[] specialButtons = {btnKHTrongNgay, jButton1}; // Các nút màu đỏ máu
         JButton[] normalButtons = {btnTTKH, btnBan, btnKhong}; // Các nút màu xanh rêu
         ButtonManager.fixButtonSize(btnAnh, 252, 301);
@@ -535,7 +556,7 @@ public class UIChinh extends javax.swing.JFrame {
         MaQuaiTheme.setupImageButtonForUI(btnTTKH, "btnTTKH");
 
         // Custom thêm nếu cần
-        jLabel2.setFont(new Font("Dialog", Font.BOLD, 14));
+        lblTen.setFont(new Font("Dialog", Font.BOLD, 14));
         jLabel6.setFont(new Font("Dialog", Font.BOLD, 14));
         jLabel8.setFont(new Font("Dialog", Font.BOLD, 14));
         jLabel8.setForeground(new Color(140, 200, 140));
@@ -614,7 +635,7 @@ public class UIChinh extends javax.swing.JFrame {
         // Thiết lập listener để cập nhật UI khi thời gian thay đổi
         gameTimeManager.setUpdateListener(new GameTimeManager.TimeUpdateListener() {
             @Override
-            public void onTimeUpdate(String timeString, int currentHour, boolean isNight) {
+public void onTimeUpdate(String timeString, int currentHour, boolean isNight) {
                 SwingUtilities.invokeLater(() -> {
                     jLabel4.setText(timeString);
                     // Có thể thêm hiệu ứng đêm nếu cần
@@ -628,7 +649,7 @@ public class UIChinh extends javax.swing.JFrame {
         // 🔥 THÊM LISTENER CHO GIỜ ĐẶC BIỆT (12h đêm)
         gameTimeManager.setSpecialHourListener(new GameTimeManager.SpecialHourListener() {
             @Override
-            public void onSpecialHour(int hour) {
+public void onSpecialHour(int hour) {
                 if (hour == 0) { // 12h đêm
                     SwingUtilities.invokeLater(() -> {
                         // Kiểm tra và chạy kịch bản ngày 4 lúc 12h đêm
@@ -640,7 +661,7 @@ public class UIChinh extends javax.swing.JFrame {
 
         gameTimeManager.setDayEndListener(new GameTimeManager.DayEndListener() {
             @Override
-            public void onDayEnd() {
+public void onDayEnd() {
                 SwingUtilities.invokeLater(() -> {
                     endDaySequence();
                 });
@@ -662,11 +683,11 @@ public class UIChinh extends javax.swing.JFrame {
         // Hiển thị bảng tổng kết ngày
         showDaySummary();
 
-        // 🔥 SỬA QUAN TRỌNG: KIỂM TRA VÀ CHẠY KỊCH BẢN TRƯỚC KHI CẬP NHẬT SỬA NGÀY
+        // KIỂM TRA VÀ CHẠY KỊCH BẢN TRƯỚC KHI CẬP NHẬT SỬA NGÀY
         kichBanNgayDau.startKichBan();
         kichBanNgay4.kiemTraVaKichHoat();
 
-        // 🔥 Sau khi chạy kịch bản (nếu có), mới cập nhật số ngày tiếp theo
+        //  Sau khi chạy kịch bản (nếu có), mới cập nhật số ngày tiếp theo
         int currentDay = gameTimeManager.getCurrentDay();
         KichBanNgayDauTien.updateDayCount(currentDay + 1); // Cập nhật cho ngày tiếp theo
 
@@ -708,8 +729,8 @@ public class UIChinh extends javax.swing.JFrame {
         return btnAnh;
     }
 
-    public JLabel getJLabel2() {
-        return jLabel2;
+    public JLabel getlblTen() {
+        return lblTen;
     }
 
     public JLabel getJLabel8() {
@@ -722,5 +743,17 @@ public class UIChinh extends javax.swing.JFrame {
 
     public void setGameTimeManager(GameTimeManager gameTimeManager) {
         this.gameTimeManager = gameTimeManager;
+    }
+
+    public TextFileStorage.PlayerData getPlayerData() {
+        return playerData;
+    }
+
+    public void updatePlayerName(String name) {
+        SwingUtilities.invokeLater(() -> {
+            lblTen.setText(name);
+            // Load lại dữ liệu để đảm bảo đồng bộ
+            loadPlayerData();
+        });
     }
 }

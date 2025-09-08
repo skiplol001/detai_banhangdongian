@@ -54,8 +54,6 @@ public class StoreController {
         loadUnlockedItems();
         initializeUnlockSystem();
 
-        // Debug: hiển thị trạng thái mở khóa
-        debugUnlockedItems();
     }
 
     private void createDatabaseDirectory() {
@@ -486,11 +484,4 @@ public class StoreController {
     }
 
     // Phương thức debug để kiểm tra trạng thái mở khóa
-    public void debugUnlockedItems() {
-        System.out.println("=== DEBUG UNLOCKED ITEMS ===");
-        for (String item : dsVatPham) {
-            System.out.println(item + ": " + (isItemUnlocked(item) ? "UNLOCKED" : "LOCKED"));
-        }
-        System.out.println("===========================");
-    }
 }

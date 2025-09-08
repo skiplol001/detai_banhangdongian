@@ -1,14 +1,18 @@
 package util;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.Scanner;
 
 /**
  * Class quản lý trạng thái game và lựa chọn của người dùng
  */
 public class GameStateManager {
+
     private static final String CHOICE_FILE = "user_choice.txt";
     private static final String TUTORIAL_COMPLETED_FILE = "tutorial_completed.txt";
 
@@ -69,13 +73,30 @@ public class GameStateManager {
     public static void resetGameState() {
         File choiceFile = new File(CHOICE_FILE);
         File tutorialFile = new File(TUTORIAL_COMPLETED_FILE);
-        
+
         if (choiceFile.exists()) {
             choiceFile.delete();
         }
-        
+
         if (tutorialFile.exists()) {
             tutorialFile.delete();
+        }
+    }
+    // Thêm phương thức này vào lớp GameStateManager
+
+    public static String getPlayerName() {
+        try {
+            String projectPath = System.getProperty("user.dir");
+            String filePath = Paths.get(projectPath, "database", "player", "player_name.txt").toString();
+
+            BufferedReader reader = new BufferedReader(new FileReader(filePath));
+            String name = reader.readLine();
+            reader.close();
+
+            return name != null ? name.trim() : "Người chơi";
+        } catch (IOException e) {
+            System.err.println("Lỗi khi đọc tên người chơi: " + e.getMessage());
+            return "Người chơi";
         }
     }
 }

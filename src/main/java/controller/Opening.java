@@ -6,6 +6,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import util.GameStateManager;
 import view.UIChinh;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Paths;
 
 /**
  * Lớp Opening hiển thị các thông báo giới thiệu gameplay và một chuỗi hội thoại
@@ -16,9 +19,10 @@ public class Opening {
 
     private UIChinh mainUI;
     private int currentMessageIndex = 0;
+    private String playerName = ""; // Biến lưu tên người chơi
 
     // Danh sách các thông báo sẽ hiển thị
-        private final String[] gameplayMessages = {
+    private final String[] gameplayMessages = {
         "Chào mừng đến với Cửa Hàng Hoang!",
         "Đây là nơi bạn sẽ quản lý một cửa hàng kỳ lạ...",
         "Cậu có thấy?... chiếc lư hương góc trái màn hình không?",
@@ -45,6 +49,33 @@ public class Opening {
         this.mainUI = mainUI;
     }
 
+    private void updatePlayerNameOnUI() {
+        if (mainUI != null) {
+            // Gọi phương thức để cập nhật tên trên UI
+            mainUI.updatePlayerName(playerName);
+        }
+    }
+
+    /**
+     * Tạm dừng thời gian game
+     */
+    private void pauseGameTime() {
+        if (mainUI != null && mainUI.getGameTimeManager() != null) {
+            mainUI.getGameTimeManager().stopTimer();
+            System.out.println("Đã tạm dừng thời gian game trong tutorial");
+        }
+    }
+
+    /**
+     * Tiếp tục thời gian game
+     */
+    private void resumeGameTime() {
+        if (mainUI != null && mainUI.getGameTimeManager() != null) {
+            mainUI.getGameTimeManager().startTimer();
+            System.out.println("Đã tiếp tục thời gian game sau tutorial");
+        }
+    }
+
     /**
      * Hiển thị tất cả các thông báo gameplay
      */
@@ -68,7 +99,7 @@ public class Opening {
         currentMessageIndex++;
 
         // Tự động hiển thị message tiếp theo sau một khoảng thời gian
-        Timer timer = new Timer(2000, new ActionListener() {
+        Timer timer = new Timer(500, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 showNextGameplayMessage();
@@ -104,15 +135,63 @@ public class Opening {
         errorDialog.setVisible(true);
 
         // Tạo timer để đóng dialog sau 5 giây
-        Timer errorTimer = new Timer(5000, new ActionListener() {
+        Timer errorTimer = new Timer(3000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 errorDialog.dispose();
-                showMysteriousDialogue();
+                askPlayerName(); // Hỏi tên người chơi trước khi hiển thị hội thoại
             }
         });
         errorTimer.setRepeats(false);
         errorTimer.start();
+    }
+
+    /**
+     * Hỏi tên người chơi
+     */
+    private void askPlayerName() {
+        playerName = JOptionPane.showInputDialog(mainUI,
+                "Tên cậu là gì!?",
+                "Hỏi tên",
+                JOptionPane.QUESTION_MESSAGE);
+
+        // Nếu người chơi không nhập tên hoặc hủy, đặt tên mặc định
+        if (playerName == null || playerName.trim().isEmpty()) {
+            playerName = "Người lạ";
+        }
+
+        // Lưu tên người chơi vào file
+        savePlayerName();
+
+        // CẬP NHẬT TÊN LÊN UI CHÍNH - THÊM DÒNG NÀY
+        updatePlayerNameOnUI();
+
+        // Tiếp tục với hội thoại bí ẩn
+        showMysteriousDialogue();
+    }
+
+    /**
+     * Lưu tên người chơi vào file
+     */
+    private void savePlayerName() {
+        try {
+            String projectPath = System.getProperty("user.dir");
+            String filePath = Paths.get(projectPath, "database", "player", "player_name.txt").toString();
+
+            // Đảm bảo thư mục tồn tại
+            java.io.File directory = new java.io.File(Paths.get(projectPath, "database", "player").toString());
+            if (!directory.exists()) {
+                directory.mkdirs();
+            }
+
+            FileWriter writer = new FileWriter(filePath);
+            writer.write(playerName);
+            writer.close();
+
+            System.out.println("Đã lưu tên người chơi: " + playerName);
+        } catch (IOException e) {
+            System.err.println("Lỗi khi lưu tên người chơi: " + e.getMessage());
+        }
     }
 
     /**
@@ -138,7 +217,7 @@ public class Opening {
         currentMessageIndex++;
 
         // Tự động hiển thị message tiếp theo sau một khoảng thời gian
-        Timer timer = new Timer(2500, new ActionListener() {
+        Timer timer = new Timer(500, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 showNextDialogueMessage();
@@ -172,6 +251,10 @@ public class Opening {
             // Kích hoạt UI chính sau khi hoàn thành
             mainUI.setEnabled(true);
             mainUI.toFront();
+
+            // TIẾP TỤC THỜI GIAN GAME
+            resumeGameTime();
+
         } else {
             JOptionPane.showMessageDialog(mainUI,
                     "Thật tốt vì cậu đã ở lại... Hãy bắt đầu thôi!",
@@ -184,6 +267,8 @@ public class Opening {
             Timer exitTimer = new Timer(1000, new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
+                    // Tiếp tục thời gian game trước khi đóng (để cleanup)
+                    resumeGameTime();
                     System.exit(0);
                 }
             });
@@ -216,6 +301,10 @@ public class Opening {
             // Kích hoạt UI chính sau khi hoàn thành
             mainUI.setEnabled(true);
             mainUI.toFront();
+
+            // TIẾP TỤC THỜI GIAN GAME
+            resumeGameTime();
+
         } else {
             // Người chơi chọn rời đi
             JOptionPane.showMessageDialog(mainUI,
@@ -228,6 +317,8 @@ public class Opening {
             Timer exitTimer = new Timer(1000, new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
+                    // Tiếp tục thời gian game trước khi đóng (để cleanup)
+                    resumeGameTime();
                     System.exit(0);
                 }
             });
@@ -240,6 +331,9 @@ public class Opening {
      * Phương thức chính để bắt đầu trình tự opening
      */
     public void startOpeningSequence() {
+        // TẠM DỪNG THỜI GIAN GAME TRƯỚC KHI BẮT ĐẦU TUTORIAL
+        pauseGameTime();
+
         // Kiểm tra xem người dùng đã từ chối trong lần trước không
         if (GameStateManager.hasUserRefusedBefore()) {
             // Hiển thị lựa chọn cho người chơi đã từ chối trước đó
@@ -252,6 +346,10 @@ public class Opening {
             // Nếu đã hoàn thành tutorial, kích hoạt UI chính ngay lập tức
             mainUI.setEnabled(true);
             mainUI.toFront();
+            mainUI.requestFocus();
+            // TIẾP TỤC THỜI GIAN GAME
+            resumeGameTime();
+
             return;
         }
 

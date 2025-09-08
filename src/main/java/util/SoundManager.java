@@ -283,16 +283,6 @@ public class SoundManager {
     public static boolean isBGMPlaying() {
         return bgmClip != null && bgmClip.isRunning();
     }
-
-    /**
-     * Tạm dừng BGM (không giải phóng tài nguyên)
-     */
-    public static void pauseBGM() {
-        if (bgmClip != null && bgmClip.isRunning()) {
-            bgmClip.stop();
-        }
-    }
-
     /**
      * Tiếp tục BGM nếu đã được enabled
      */
@@ -311,5 +301,68 @@ public class SoundManager {
      */
     public static boolean isSoundsLoaded() {
         return soundsLoaded;
+    }
+
+    public static long pauseBGM() {
+        long position = 0;
+        if (bgmClip != null && bgmClip.isRunning()) {
+            position = bgmClip.getMicrosecondPosition();
+            bgmClip.stop();
+        }
+        return position;
+    }
+
+    /**
+     * Lấy vị trí hiện tại của BGM
+     */
+    public static long getBGMPosition() {
+        if (bgmClip != null && bgmClip.isRunning()) {
+            return bgmClip.getMicrosecondPosition();
+        }
+        return 0;
+    }
+
+    /**
+     * Tiếp tục BGM từ vị trí cụ thể
+     */
+    public static void resumeBGMFromPosition(long position) {
+        if (soundEnabled && bgmEnabled && bgmClip != null) {
+            try {
+                bgmClip.setMicrosecondPosition(position);
+                if (!bgmClip.isRunning()) {
+                    bgmClip.loop(Clip.LOOP_CONTINUOUSLY);
+                }
+            } catch (Exception e) {
+                System.err.println("Lỗi khi resume BGM từ vị trí: " + e.getMessage());
+            }
+        }
+    }
+
+    /**
+     * Kiểm tra xem BGM có đang chạy không
+     */
+    public static void stopBGMCompletely() {
+        if (bgmClip != null) {
+            if (bgmClip.isRunning()) {
+                bgmClip.stop();
+            }
+            bgmClip.close();
+            bgmClip = null;
+        }
+    }
+
+    /**
+     * Khởi động lại BGM từ đầu
+     */
+    public static void restartBGM() {
+        if (bgmClip != null) {
+            if (bgmClip.isRunning()) {
+                bgmClip.stop();
+            }
+            bgmClip.setFramePosition(0);
+            if (soundEnabled && bgmEnabled) {
+                bgmClip.loop(Clip.LOOP_CONTINUOUSLY);
+            }
+        }
     }
 }
