@@ -55,7 +55,6 @@ public class UIChinh extends javax.swing.JFrame {
     private KichBanNgay6 kichBanNgay6;
     private KichBanNgay7 kichBanNgay7;
 
-
     public UIChinh() {
         initComponents();
         customizeUI();
@@ -690,7 +689,11 @@ public class UIChinh extends javax.swing.JFrame {
     }
 
     public void endDaySequence() {
-        // HIỂN THỊ HỘI THOẠI CHO NGÀY HIỆN TẠI TRƯỚC KHI KẾT THÚC
+        // GIẢI MÃ FILE CHO NGÀY HIỆN TẠI
+        String result = ROT13Decoder.decodeAndOverwriteFile();
+        if (!result.startsWith("Lỗi")) {
+            System.out.println("Đã giải mã file: " + result);
+        }
 
         // Hiển thị thông báo kết thúc ngày
         JOptionPane.showMessageDialog(this,
@@ -715,10 +718,11 @@ public class UIChinh extends javax.swing.JFrame {
             KichBanNgayDauTien.updateDayCount(currentDay + 1);
 
             // CẬP NHẬT COUNT.TXT CHO ROT13DECODER
+            // GIẢI MÃ FILE CHO NGÀY HIỆN TẠI
             try {
                 ROT13Decoder.incrementDayCount();
             } catch (IOException e) {
-                System.err.println("Lỗi khi cập nhật count.txt: " + e.getMessage());
+                System.err.println("Lỗi khi cập nhật ngày: " + e.getMessage());
             }
         }
 
