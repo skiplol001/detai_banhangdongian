@@ -122,7 +122,7 @@ public class UiKhachHang extends javax.swing.JFrame {
     }
 
     private JLabel createKhachHangLabel(KhachHang khachHang, int index) {
-        JLabel label = new JLabel("<html><center>" + khachHang.getTen() + " Mã: " + khachHang.getMaKH() + "</center></html>");
+        JLabel label = new JLabel("<html><center>" + khachHang.getTen() + "| Mã: " + khachHang.getMaKH() + "</center></html>");
 
         label.setOpaque(false);
         label.setForeground(new Color(30, 50, 30));
