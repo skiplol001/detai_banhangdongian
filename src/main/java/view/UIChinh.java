@@ -5,6 +5,8 @@
 package view;
 
 import controller.KichBanNgay4;
+import controller.KichBanNgay6;
+import controller.KichBanNgay7;
 import controller.KichBanNgayDauTien;
 import controller.Opening;
 import java.awt.BorderLayout;
@@ -32,6 +34,8 @@ import javax.swing.OverlayLayout;
 import javax.swing.SwingUtilities;
 import model.GameTimeManager;
 import util.ButtonManager;
+import util.DayEndCustomerManager;
+import util.ROT13Decoder;
 import util.SoundManager;
 
 /**
@@ -48,6 +52,9 @@ public class UIChinh extends javax.swing.JFrame {
     private KhachHang khachHangMoiTamThoi;
     private KichBanNgayDauTien kichBanNgayDau;
     private KichBanNgay4 kichBanNgay4;
+    private KichBanNgay6 kichBanNgay6;
+    private KichBanNgay7 kichBanNgay7;
+
 
     public UIChinh() {
         initComponents();
@@ -70,6 +77,8 @@ public class UIChinh extends javax.swing.JFrame {
         Opening opening = new Opening(this);
         kichBanNgayDau = new KichBanNgayDauTien(this);
         kichBanNgay4 = new KichBanNgay4(this, gameTimeManager);
+        kichBanNgay6 = new KichBanNgay6(this, gameTimeManager);
+        kichBanNgay7 = new KichBanNgay7(this, gameTimeManager);
         int savedDayCount = KichBanNgayDauTien.getCurrentDayCount();
         opening.startOpeningSequence();
     }
@@ -80,6 +89,15 @@ public class UIChinh extends javax.swing.JFrame {
             // Dừng timer khi đóng ứng dụng
             if (gameTimeManager != null && gameTimeManager.isTimerRunning()) {
                 gameTimeManager.stopTimer();
+            }
+            if (kichBanNgay4 != null && kichBanNgay4.isKichBanActive()) {
+                kichBanNgay4.huyKichBan();
+            }
+            if (kichBanNgay6 != null && kichBanNgay6.isKichBanActive()) {
+                kichBanNgay6.huyKichBan();
+            }
+            if (kichBanNgay7 != null && kichBanNgay7.isKichBanActive()) {
+                kichBanNgay7.huyKichBan();
             }
             // Dọn dẹp SoundManager khi ứng dụng đóng
             SoundManager.cleanup();
@@ -510,8 +528,7 @@ public class UIChinh extends javax.swing.JFrame {
         }
     }
 
-
-public void updateUI() {
+    public void updateUI() {
         jLabel6.setText(String.valueOf(playerData.money));
         jLabel8.setText(String.valueOf(playerData.mentalPoints));
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -635,7 +652,7 @@ public void updateUI() {
         // Thiết lập listener để cập nhật UI khi thời gian thay đổi
         gameTimeManager.setUpdateListener(new GameTimeManager.TimeUpdateListener() {
             @Override
-public void onTimeUpdate(String timeString, int currentHour, boolean isNight) {
+            public void onTimeUpdate(String timeString, int currentHour, boolean isNight) {
                 SwingUtilities.invokeLater(() -> {
                     jLabel4.setText(timeString);
                     // Có thể thêm hiệu ứng đêm nếu cần
@@ -649,7 +666,7 @@ public void onTimeUpdate(String timeString, int currentHour, boolean isNight) {
         // 🔥 THÊM LISTENER CHO GIỜ ĐẶC BIỆT (12h đêm)
         gameTimeManager.setSpecialHourListener(new GameTimeManager.SpecialHourListener() {
             @Override
-public void onSpecialHour(int hour) {
+            public void onSpecialHour(int hour) {
                 if (hour == 0) { // 12h đêm
                     SwingUtilities.invokeLater(() -> {
                         // Kiểm tra và chạy kịch bản ngày 4 lúc 12h đêm
@@ -661,7 +678,7 @@ public void onSpecialHour(int hour) {
 
         gameTimeManager.setDayEndListener(new GameTimeManager.DayEndListener() {
             @Override
-public void onDayEnd() {
+            public void onDayEnd() {
                 SwingUtilities.invokeLater(() -> {
                     endDaySequence();
                 });
@@ -673,12 +690,16 @@ public void onDayEnd() {
     }
 
     public void endDaySequence() {
+        // HIỂN THỊ HỘI THOẠI CHO NGÀY HIỆN TẠI TRƯỚC KHI KẾT THÚC
+
         // Hiển thị thông báo kết thúc ngày
         JOptionPane.showMessageDialog(this,
                 "Đã hết ngày! Cửa hàng đóng cửa.",
                 "Kết thúc ngày",
                 JOptionPane.INFORMATION_MESSAGE);
+
         TextFileStorage.savePlayerData(playerData);
+        DayEndCustomerManager.processEndOfDay();
 
         // Hiển thị bảng tổng kết ngày
         showDaySummary();
@@ -686,10 +707,20 @@ public void onDayEnd() {
         // KIỂM TRA VÀ CHẠY KỊCH BẢN TRƯỚC KHI CẬP NHẬT SỬA NGÀY
         kichBanNgayDau.startKichBan();
         kichBanNgay4.kiemTraVaKichHoat();
-
-        //  Sau khi chạy kịch bản (nếu có), mới cập nhật số ngày tiếp theo
+        kichBanNgay6.kiemTraVaKichHoat();
+        kichBanNgay7.kiemTraVaKichHoat();
+        // Sau khi chạy kịch bản (nếu có), mới cập nhật số ngày tiếp theo
         int currentDay = gameTimeManager.getCurrentDay();
-        KichBanNgayDauTien.updateDayCount(currentDay + 1); // Cập nhật cho ngày tiếp theo
+        if (currentDay != 4) {
+            KichBanNgayDauTien.updateDayCount(currentDay + 1);
+
+            // CẬP NHẬT COUNT.TXT CHO ROT13DECODER
+            try {
+                ROT13Decoder.incrementDayCount();
+            } catch (IOException e) {
+                System.err.println("Lỗi khi cập nhật count.txt: " + e.getMessage());
+            }
+        }
 
         // Chuẩn bị cho ngày mới
         prepareForNewDay();

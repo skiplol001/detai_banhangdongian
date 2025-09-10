@@ -18,14 +18,14 @@ public class QuanLyKhachHang {
     private static List<KhachHang> taiDanhSachKhachHangGoc() {
         List<KhachHang> danhSach = new ArrayList<>();
         Path filePath = Paths.get(FILE_KHACH_HANG_THAT);
-        
+
         try {
             // Đảm bảo thư mục tồn tại
             Files.createDirectories(Paths.get("database"));
-            
+
             if (Files.exists(filePath)) {
                 System.out.println("Đang đọc file khách hàng thật: " + filePath.toAbsolutePath());
-                
+
                 List<String> cacDong = Files.readAllLines(filePath);
                 if (cacDong.isEmpty()) {
                     System.out.println("File khách hàng thật tồn tại nhưng trống, sử dụng danh sách mặc định");
@@ -36,11 +36,11 @@ public class QuanLyKhachHang {
                     String[] cacPhan = dong.split(",");
                     if (cacPhan.length >= 4) {
                         danhSach.add(new KhachHang(
-                            cacPhan[0].trim(),
-                            Integer.parseInt(cacPhan[1].trim()),
-                            cacPhan[2].trim(),
-                            cacPhan[3].trim(),
-                            false
+                                cacPhan[0].trim(),
+                                Integer.parseInt(cacPhan[1].trim()),
+                                cacPhan[2].trim(),
+                                cacPhan[3].trim(),
+                                false
                         ));
                     }
                 }
@@ -55,23 +55,23 @@ public class QuanLyKhachHang {
             System.err.println("Sử dụng danh sách mặc định do có lỗi");
             return taoDanhSachMacDinh();
         }
-        
+
         return danhSach;
     }
 
     private static List<KhachHang> taoDanhSachMacDinh() {
         return Arrays.asList(
-            new KhachHang("Liễu Như Yên", 25, "Nữ", "KH001", false),
-            new KhachHang("Tạ Minh Kha", 30, "Nam", "KH002", false),
-            new KhachHang("Tiểu Lạc", 18, "Nữ", "KH003", false),
-            new KhachHang("Shyn Mụi Mụi", 20, "Nữ", "KH004", false),
-            new KhachHang("Tăng Quốc Cường", 28, "Nam", "KH005", false)
+                new KhachHang("Liễu Như Yên", 25, "Nữ", "KH001", false),
+                new KhachHang("Tạ Minh Kha", 30, "Nam", "KH002", false),
+                new KhachHang("Tiểu Lạc", 18, "Nữ", "KH003", false),
+                new KhachHang("Shyn Mụi Mụi", 20, "Nữ", "KH004", false),
+                new KhachHang("Tăng Quốc Cường", 28, "Nam", "KH005", false)
         );
     }
 
     private static List<KhachHang> taoVaGhiDanhSachMacDinh() {
         List<KhachHang> danhSachMacDinh = taoDanhSachMacDinh();
-        
+
         try {
             // Ghi danh sách mặc định vào file
             StringBuilder noiDung = new StringBuilder();
@@ -86,12 +86,12 @@ public class QuanLyKhachHang {
                     noiDung.toString().getBytes(),
                     StandardOpenOption.CREATE,
                     StandardOpenOption.TRUNCATE_EXISTING);
-                    
+
             System.out.println("Đã tạo file khách hàng thật mặc định: " + Paths.get(FILE_KHACH_HANG_THAT).toAbsolutePath());
         } catch (IOException e) {
             System.err.println("Lỗi khi tạo file khách hàng thật mặc định: " + e.getMessage());
         }
-        
+
         return danhSachMacDinh;
     }
 
@@ -106,7 +106,7 @@ public class QuanLyKhachHang {
                 // Nếu là vong: tuổi từ 100 trở lên và mã KH được random
                 int tuoiVong = 100 + random.nextInt(100); // Tuổi từ 100-199
                 String maVong = "V" + (1000 + random.nextInt(9000)); // Mã dạng V1000-V9999
-                
+
                 danhSachKhachHangHomNay.add(new KhachHang(
                         baseCustomer.getTen(),
                         tuoiVong,
@@ -148,7 +148,7 @@ public class QuanLyKhachHang {
                     noiDung.toString().getBytes(),
                     StandardOpenOption.CREATE,
                     StandardOpenOption.TRUNCATE_EXISTING);
-                    
+
             System.out.println("Đã lưu danh sách khách hàng vào: " + Paths.get(FILE_KHACH_HANG).toAbsolutePath());
         } catch (IOException e) {
             System.err.println("Lỗi khi lưu danh sách khách hàng: " + e.getMessage());
@@ -162,9 +162,9 @@ public class QuanLyKhachHang {
         try {
             // Đảm bảo thư mục tồn tại
             Files.createDirectories(Paths.get("database"));
-            
+
             // Kiểm tra file tồn tại và có thể đọc
-            if (Files.exists(filePath))  {
+            if (Files.exists(filePath)) {
                 System.out.println("Đang đọc từ file khách hàng: " + filePath.toAbsolutePath());
 
                 List<String> cacDong = Files.readAllLines(filePath);
@@ -200,12 +200,17 @@ public class QuanLyKhachHang {
 
         return danhSachKhachHang;
     }
-    
+
+    public static void reloadDanhSachKhachHangThat() {
+        DANH_SACH_KHACH_HANG_GOC = taiDanhSachKhachHangGoc();
+    }
+
     // Phương thức lấy danh sách khách hàng thật (cho UI)
     public static List<KhachHang> getDanhSachKhachHangThat() {
+        reloadDanhSachKhachHangThat();
         return new ArrayList<>(DANH_SACH_KHACH_HANG_GOC);
     }
-    
+
     // Phương thức thống kê số lượng khách vong
     public static int demSoKhachVong(List<KhachHang> danhSach) {
         int count = 0;
@@ -216,7 +221,7 @@ public class QuanLyKhachHang {
         }
         return count;
     }
-    
+
     // Phương thức thống kê số lượng khách thường
     public static int demSoKhachThuong(List<KhachHang> danhSach) {
         int count = 0;

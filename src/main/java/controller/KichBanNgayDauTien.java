@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Paths;
 
 /**
  *
@@ -129,14 +130,16 @@ public class KichBanNgayDauTien {
     }
 
     // Phương thức static để các class khác có thể cập nhật số ngày
-    public static void updateDayCount(int dayCount) {
+    public static void updateDayCount(int newDay) {
         try {
-            ensureDirectory();
-            BufferedWriter writer = new BufferedWriter(new FileWriter(COUNT_FILE));
-            writer.write(String.valueOf(dayCount));
-            writer.close();
+            String projectPath = System.getProperty("user.dir");
+            String countFilePath = Paths.get(projectPath, "database", "dialog", "count.txt").toString();
+
+            try (FileWriter writer = new FileWriter(countFilePath)) {
+                writer.write(String.valueOf(newDay));
+            }
         } catch (IOException e) {
-            System.err.println("Lỗi cập nhật số ngày: " + e.getMessage());
+            System.err.println("Lỗi khi cập nhật số ngày: " + e.getMessage());
         }
     }
 
