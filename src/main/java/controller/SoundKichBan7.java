@@ -33,7 +33,7 @@ public class SoundKichBan7 {
         stopCurrentSound();
 
         // Thử phát file MP3 trước, nếu không có thì dùng WAV
-        String[] extensions = {".mp3", ".wav"};
+        String[] extensions = {".wav"};
         String soundPath = null;
 
         for (String ext : extensions) {

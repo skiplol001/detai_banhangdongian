@@ -54,6 +54,7 @@ public class UIChinh extends javax.swing.JFrame {
     private KichBanNgay4 kichBanNgay4;
     private KichBanNgay6 kichBanNgay6;
     private KichBanNgay7 kichBanNgay7;
+    private boolean hasRunDay4Script = false;
 
     public UIChinh() {
         initComponents();
@@ -76,6 +77,7 @@ public class UIChinh extends javax.swing.JFrame {
         Opening opening = new Opening(this);
         kichBanNgayDau = new KichBanNgayDauTien(this);
         kichBanNgay4 = new KichBanNgay4(this, gameTimeManager);
+        hasRunDay4Script = false;
         kichBanNgay6 = new KichBanNgay6(this, gameTimeManager);
         kichBanNgay7 = new KichBanNgay7(this, gameTimeManager);
         int savedDayCount = KichBanNgayDauTien.getCurrentDayCount();
@@ -669,7 +671,12 @@ public class UIChinh extends javax.swing.JFrame {
                 if (hour == 0) { // 12h đêm
                     SwingUtilities.invokeLater(() -> {
                         // Kiểm tra và chạy kịch bản ngày 4 lúc 12h đêm
-                        kichBanNgay4.kiemTraVaKichHoat();
+                        // CHỈ chạy nếu đúng là ngày 4 và chưa chạy bao giờ
+                        int currentDay = gameTimeManager.getCurrentDay();
+                        if (currentDay == 4 && !hasRunDay4Script) {
+                            kichBanNgay4.kiemTraVaKichHoat();
+                            hasRunDay4Script = true; // Đánh dấu đã chạy
+                        }
                     });
                 }
             }
@@ -688,7 +695,7 @@ public class UIChinh extends javax.swing.JFrame {
         gameTimeManager.startTimer();
     }
 
-    public void endDaySequence() {
+    private void endDaySequence() {
         // GIẢI MÃ FILE CHO NGÀY HIỆN TẠI
         String result = ROT13Decoder.decodeAndOverwriteFile();
         if (!result.startsWith("Lỗi")) {
@@ -707,25 +714,27 @@ public class UIChinh extends javax.swing.JFrame {
         // Hiển thị bảng tổng kết ngày
         showDaySummary();
 
+        // Lấy ngày hiện tại trước khi cập nhật
+        int currentDay = gameTimeManager.getCurrentDay();
+
         // KIỂM TRA VÀ CHẠY KỊCH BẢN TRƯỚC KHI CẬP NHẬT SỬA NGÀY
         kichBanNgayDau.startKichBan();
-        kichBanNgay4.kiemTraVaKichHoat();
-        kichBanNgay6.kiemTraVaKichHoat();
-        kichBanNgay7.kiemTraVaKichHoat();
-        // Sau khi chạy kịch bản (nếu có), mới cập nhật số ngày tiếp theo
-        int currentDay = gameTimeManager.getCurrentDay();
-        if (currentDay != 4) {
-            KichBanNgayDauTien.updateDayCount(currentDay + 1);
 
-            // CẬP NHẬT COUNT.TXT CHO ROT13DECODER
-            // GIẢI MÃ FILE CHO NGÀY HIỆN TẠI
-            try {
-                ROT13Decoder.incrementDayCount();
-            } catch (IOException e) {
-                System.err.println("Lỗi khi cập nhật ngày: " + e.getMessage());
-            }
+        // CHỈ chạy kịch bản ngày 4 nếu đúng là ngày 4 và chưa chạy bao giờ
+        if (currentDay == 4 && !hasRunDay4Script) {
+            kichBanNgay4.kiemTraVaKichHoat();
+            hasRunDay4Script = true; // Đánh dấu đã chạy
         }
 
+        kichBanNgay6.kiemTraVaKichHoat();
+        kichBanNgay7.kiemTraVaKichHoat();
+
+        // CẬP NHẬT COUNT.TXT CHO ROT13DECODER
+        try {
+            ROT13Decoder.incrementDayCount();
+        } catch (IOException e) {
+            System.err.println("Lỗi khi cập nhật ngày: " + e.getMessage());
+        }
         // Chuẩn bị cho ngày mới
         prepareForNewDay();
     }

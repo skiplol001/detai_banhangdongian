@@ -1,10 +1,10 @@
 Liễu Như Yên,25,Nữ,KH001
 Tiểu Lạc,18,Nữ,KH003
 Shyn Mụi Mụi,20,Nữ,KH004
-Tăng Quốc Cường,28,Nam,KH005
-Thầy Bạch,57,Nam,KH07
 Huyền Thanh Tố Uyển,19,Nữ,KH10
 Lữ Khách Phương Bắc,22,Nữ,KH011
 Lữ Khách Phương Bắc,18,Nam,KH012
 Vua Ăn Đòn,18,Nam,KH013
 Sứ Giả Khe Nứt,21,Nữ,KH014
+Khách Tây,26,Nữ,KH015
+Lữ Khách Phương Bắc,27,Nam,KH016

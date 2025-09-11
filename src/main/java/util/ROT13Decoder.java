@@ -19,8 +19,8 @@ public class ROT13Decoder {
     private static final String ENCRYPTED_FILE_PREFIX = "xubvqnh";
 
     /**
-     * Giải mã file xubvqnh.txt và GHI ĐÈ file gốc thành dạng đọc được
-     * Trả về đường dẫn đến file đã được giải mã
+     * Giải mã file xubvqnh.txt và GHI ĐÈ file gốc thành dạng đọc được Trả về
+     * đường dẫn đến file đã được giải mã
      */
     public static String decodeAndOverwriteFile() {
         try {
@@ -191,15 +191,28 @@ public class ROT13Decoder {
      * Cập nhật số ngày trong count.txt (chỉ từ 1-6)
      */
     public static void incrementDayCount() throws IOException {
-        int currentDay = readDayCount();
-        int newDay = Math.min(6, currentDay + 1);
+        String projectPath = System.getProperty("user.dir");
+        String countFilePath = Paths.get(projectPath, "database", "count.txt").toString();
 
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(COUNT_FILE))) {
+        File countFile = new File(countFilePath);
+
+        // Đọc ngày hiện tại
+        int currentDay = 1;
+        if (countFile.exists()) {
+            String content = new String(Files.readAllBytes(Paths.get(countFilePath))).trim();
+            if (!content.isEmpty() && content.matches("\\d+")) {
+                currentDay = Integer.parseInt(content);
+            }
+        }
+
+        // Tăng ngày lên 1
+        int newDay = currentDay + 1;
+
+        // Ghi file mới
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(countFilePath))) {
             writer.write(String.valueOf(newDay));
         }
-        
-        // TỰ ĐỘNG GIẢI MÃ FILE KHI CHUYỂN NGÀY
-        decodeAndOverwriteFile();
+
     }
 
     /**
@@ -221,12 +234,16 @@ public class ROT13Decoder {
             String folderName = getFolderNameByDay(day);
             String folderPath = BASE_PATH + "/" + folderName;
             File folder = new File(folderPath);
-            
-            if (!folder.exists()) return false;
-            
+
+            if (!folder.exists()) {
+                return false;
+            }
+
             File encryptedFile = findEncryptedFile(folder);
-            if (encryptedFile == null) return false;
-            
+            if (encryptedFile == null) {
+                return false;
+            }
+
             // Đọc thử nội dung file để kiểm tra
             String content = readFileContent(encryptedFile);
             // Nếu file chứa các ký tự ROT13 đặc trưng, coi như chưa giải mã

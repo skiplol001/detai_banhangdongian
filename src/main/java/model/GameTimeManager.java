@@ -9,7 +9,7 @@ public class GameTimeManager {
 
     private Timer gameTimer;
     private long gameStartTime;
-    private final float TIME_SCALE = 5.0f; // Tăng tốc độ lên 10 lần để test nhanh
+    private final float TIME_SCALE = 10.0f; // Tăng tốc độ lên 10 lần để test nhanh
     private int gameDayLength = 8 * 60 * 60 * 10; // 8 giờ game (tính bằng 1/100 giây)
     private int startHour = 19; // 7h tối
     private int endHour = 3; // 3h sáng
