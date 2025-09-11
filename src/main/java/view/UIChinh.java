@@ -664,7 +664,7 @@ public class UIChinh extends javax.swing.JFrame {
             }
         });
 
-        // 🔥 THÊM LISTENER CHO GIỜ ĐẶC BIỆT (12h đêm)
+        // THÊM LISTENER CHO GIỜ ĐẶC BIỆT (12h đêm)
         gameTimeManager.setSpecialHourListener(new GameTimeManager.SpecialHourListener() {
             @Override
             public void onSpecialHour(int hour) {
